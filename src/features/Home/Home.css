@@ -1,0 +1,27 @@
+.home-container {
+    padding: 2rem;
+    background-color: black;
+}
+
+.home-title {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.post-list,
+.comment-list,
+.submeddit-list {
+    margin-top: 1rem;
+}
+
+.comment-item,
+.submeddit-item {
+    border-bottom: 1px solid white;
+    padding: 1rem 0;
+}
+
+.comment-item p,
+.submeddit-item p {
+    margin: 0.5rem 0;
+}
