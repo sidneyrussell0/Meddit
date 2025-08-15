@@ -97,8 +97,8 @@ const commentSlice = createSlice({
             //createComment
             .addCase(createComment.pending, setPending)
             .addCase(createComment.fulfilled, (state, action) => {
-                loading = false;
-                success = true;
+                state.loading = false;
+                state.success = true;
                 state.comments.push(action.payload);
             })
             .addCase(createComment.rejected, setRejected)
@@ -122,8 +122,8 @@ const commentSlice = createSlice({
             //fetchComment
             .addCase(fetchComment.pending, setPending)
             .addCase(fetchComment.fulfilled, (state, action) => {
-                loading = false;
-                success = true;
+                state.loading = false;
+                state.success = true;
                 state.searchedComment = action.payload;
             })
             .addCase(fetchComment.rejected, setRejected)

@@ -27,7 +27,7 @@ const searchSlice = createSlice({
             state.loading = false;
             state.error = null;
             state.success = false;
-            state.searchTerm = '',
+            state.searchTerm = '';
             state.results = [];
         },
     },
@@ -46,7 +46,7 @@ const searchSlice = createSlice({
             })
             .addCase(searchPosts.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.payload || action.error.message;
             });
     },
 });

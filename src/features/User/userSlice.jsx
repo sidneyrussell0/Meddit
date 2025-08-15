@@ -115,7 +115,7 @@ const userSlice = createSlice({
                 const matchId = updated.id || updated._id;
 
                 //Update profiles list
-                state.profiles = state.profiles.map((p) =>
+                state.profiles = state.profiles.map((profiles) =>
                     (profiles.id || profiles._id) === matchId ? updated : profiles);
 
                 //Update searchedUser if it's the same one
