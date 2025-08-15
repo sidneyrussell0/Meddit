@@ -12,9 +12,9 @@ import PostThread from '../post/PostThread';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { comments, loading: commentsLoading, error: commentsError, success: commentsSuccess } = useSelector((state) => state.comments);
-  const { posts, loading: postsLoading, error: postsError, success: postsSuccess } = useSelector((state) => state.posts);
-  const { submeddit, loading: submedditsloading, error: submedditsError, success: submedditsSuccess } = useSelector((state) => state.submeddit);
+  const { comment, loading: commentLoading, error: commentError, success: commentSuccess } = useSelector((state) => state.commentReducer);
+  const { post, loading: postLoading, error: postError, success: postSuccess } = useSelector((state) => state.postReducer);
+  const { submeddit, loading: submedditloading, error: submedditError, success: submedditSuccess } = useSelector((state) => state.submedditReducer);
 
   //Fetch data types 
   useEffect(() => {
@@ -26,12 +26,12 @@ const Home = () => {
   return (
       <div className='home-container'>
         <h2 className='section-title'>Latest Posts</h2>
-        {postsLoading && <p>Loading posts...</p>}
-        {postsError && <p>Error: {postsError}</p>}
-        {posts && posts.length > 0 ? (
-          <PostThread posts={posts} />
+        {postLoading && <p>Loading posts...</p>}
+        {postError && <p>Error: {postError}</p>}
+        {post && post.length > 0 ? (
+          <PostThread post={post} />
         ) : (
-          !postsLoading && <p>No posts found.</p>
+          !postLoading && <p>No posts found.</p>
         )}
       </div>
   );

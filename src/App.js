@@ -1,16 +1,11 @@
-//make sure to update with all paths
-//ADD CREATE POST LINK
-
 //Main
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-/*import { useDispatch, useSelector } from 'react-redux';*/
-/*import Loading from '../shared/utilities/LoadingSpinner';*/
 import './App.css';
 
 //Home&Layout
 import Home from './features/home/Home';
-/*import Layout from '../shared/layout/Layout';*/
+import Layout from './components/layout/Layout';
 
 //Nav
 import About from './features/about/About';
@@ -25,53 +20,23 @@ import User from './features/user/User';
 
 
 function App() {
-    /*const dispatch = useDispatch();
-    const errorMessage = useSelector((state) => state.error.message);
-    const globalLoading = useSelector((state) => state.ui.globalLoading);*/
-
-    //Backend OAuth
-    /*useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
-        const username = params.get('username');
-    
-        if (token) {
-            localStorage.setItem('reddit_token', token);
-        }
-        if (username) {
-            localStorage.setItem('reddit_username', username);
-        }
-        if (token || username) {
-            window.history.replaceState({}, document.title, '/');
-        }
-      }, []); */
-
     return(
-        <>
             <Router>
                 <Routes>
-            
-                        {/* Home/Main */}
-                        <Route path="/" element={<Home />} />
+                        <Route path ="/" element={<Layout />}>
+                            <Route index element={<Home />} />
+                            <Route path="about" element={<About />} />
+                            <Route path="help" element={<Help />} />
+                            <Route path="settings" element={<Settings />} />
+                            <Route path='posts/:id' element={<Post />} />
+                            <Route path="m/:submeddit" element={<Submeddits />} />
+                            <Route path="u/:username" element={<User />} />
+                        </Route>
 
-                        {/* Header */}
-                        
-
-                        {/* Nav */}
-                        <Route path="/about" element={<About />} />
-                        <Route path="/help" element={<Help />} />
-                        <Route path="/settings" element={<Settings />} />
-
-                        {/* Features */}
-                        <Route path='/posts/:id' element={<Post />} />
-                        <Route path="/m/:submeddit" element={<Submeddits />} />
-                        <Route path="/u/:username" element={<User />} />
-
-                    {/* Outside layout */}
+                    {/* 404 */}
                     <Route path="*" element={<div>404 Not Found</div>} />
                 </Routes>
             </Router>
-         </>
     );
 }
 

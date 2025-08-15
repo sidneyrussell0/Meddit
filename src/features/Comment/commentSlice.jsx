@@ -1,11 +1,10 @@
-//Check Slice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
 
 //createComment
-export const createComment = createAsyncThunk('comments/createComment', async (commentData, thunkAPI) => {
+export const createComment = createAsyncThunk('comment/createComment', async (commentData, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/comments`, {
+        const res = await fetch(`${API_ROOT}/comment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(commentData),
@@ -18,9 +17,9 @@ export const createComment = createAsyncThunk('comments/createComment', async (c
 });
 
 //deleteComment
-export const deleteComment = createAsyncThunk('comments/deleteComment', async (commentId, thunkAPI) => {
+export const deleteComment = createAsyncThunk('comment/deleteComment', async (commentId, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/comments/${commentId}`, {
+        const res = await fetch(`${API_ROOT}/comment/${commentId}`, {
             method: 'DELETE',
         });
         if (!res.ok) throw new Error('Unable to delete comment');
@@ -31,9 +30,9 @@ export const deleteComment = createAsyncThunk('comments/deleteComment', async (c
 });
 
 //fetchAllComments
-export const fetchAllComments = createAsyncThunk('comments/fetchAll', async (_, thunkAPI) => {
+export const fetchAllComments = createAsyncThunk('comment/fetchAll', async (_, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/comments`);
+        const res = await fetch(`${API_ROOT}/comment`);
         if (!res.ok) throw new Error('Failed to fetch comments');
         return await res.json();
     } catch (error) {
@@ -42,9 +41,9 @@ export const fetchAllComments = createAsyncThunk('comments/fetchAll', async (_, 
   });
 
 //fetchComment
-export const fetchComment = createAsyncThunk('comments/fetchComment', async (commentId, thunkAPI) => {
+export const fetchComment = createAsyncThunk('comment/fetchComment', async (commentId, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/comments/${commentId}`);
+        const res = await fetch(`${API_ROOT}/comment/${commentId}`);
         if (!res.ok) throw new Error('Comment not found');
         return await res.json();
     } catch (error) {
@@ -53,9 +52,9 @@ export const fetchComment = createAsyncThunk('comments/fetchComment', async (com
 });
 
 //likeComment
-export const likeComment = createAsyncThunk('comments/likeComment', async (commentId, thunkAPI) => {
+export const likeComment = createAsyncThunk('comment/likeComment', async (commentId, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/comments/${commentId}/like`, {
+        const res = await fetch(`${API_ROOT}/comment/${commentId}/like`, {
             method: 'POST',
         });
         if (!res.ok) throw new Error('Unable to like comment');
@@ -66,7 +65,7 @@ export const likeComment = createAsyncThunk('comments/likeComment', async (comme
 });
 
 const commentSlice = createSlice({
-    name: 'comments',
+    name: 'comment',
     initialState: {
         comments: [],
         searchedComment: null,

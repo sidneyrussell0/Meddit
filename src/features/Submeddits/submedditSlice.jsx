@@ -1,4 +1,3 @@
-//Check Slice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
 
