@@ -15,7 +15,7 @@ import Home from './features/home/Home';
 //Nav
 import About from './features/about/About';
 import Help from './features/help/Help';
-import Settings from './features/settings/Settings';
+import Settings from './features/Settings/Settings';
 
 //Features
 import Post from './features/post/Post';
