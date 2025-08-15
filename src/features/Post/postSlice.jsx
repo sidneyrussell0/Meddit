@@ -1,0 +1,178 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { API_ROOT } from '../../app/reddit';
+import { setGlobalLoading } from '../../shared/uiSlice';
+
+
+const post = JSON.parse(localStorage.getItem('post'));  
+
+//createPost
+export const createPost = createAsyncThunk('posts/createPost', async (postData, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    try {
+        dispatch(setGlobalLoading(true));
+
+        const data = await postsAPI.createPost(postData);
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message || 'Failed to create post');
+    } finally {
+        dispatch(setGlobalLoading(false));
+    }
+});
+
+//deletePost
+export const deletePost = createAsyncThunk('posts/deletePost', async (postId, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    try {
+        dispatch(setGlobalLoading(true));
+
+        const data = await postsAPI.deletePost(postId);
+        return postId; //Return the ID so it can be removed from state
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message || 'Unable to delete post');
+    } finally {
+        dispatch(setGlobalLoading(false));
+    }
+});
+
+//fetchAllPosts
+export const fetchAllPosts = createAsyncThunk('posts/fetchAll', async (_, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    try {
+        dispatch(setGlobalLoading(true));
+
+        const data = await postsAPI.fetchAllPosts();
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message || 'Posts not found');
+    } finally {
+        dispatch(setGlobalLoading(false));
+    }
+  });
+
+//fetchPost
+export const fetchPost = createAsyncThunk('posts/loadPost', async (postId, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    try {
+        dispatch(setGlobalLoading(true));
+
+        const data = await postsAPI.fetchPost(postId);
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message || 'Post not found');
+    } finally {
+        dispatch(setGlobalLoading(false));
+    }
+});
+
+//likePost
+export const likePost = createAsyncThunk('posts/likePost', async (postId, thunkAPI) => {
+    const { dispatch } = thunkAPI;
+    try {
+        dispatch(setGlobalLoading(true));
+
+        const data = await postsAPI.likePost(postId);
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message || 'Unable to like post')
+    } finally {
+        dispatch(setGlobalLoading(false));
+    }
+});
+
+
+const postsSlice = createSlice({
+    name: 'posts',
+    initialState: {
+        posts: [],
+        searchedPost: post || null,
+        loading: false,
+        error: null,
+        success: false,
+    },
+    reducers: {
+        resetPostState: (state) => {
+            state.loading = false;
+            state.error = null;
+            state.success = false;
+            state.searchedPost = null;
+        },
+    },
+    extraReducers: builder => {
+        builder
+            //createPost
+            .addCase(createPost.pending, state => {
+                state.loading = true;
+            })
+            .addCase(createPost.fulfilled, (state, action) => {
+                state.loading = false;
+                state.posts.push(action.payload);
+                state.error = null;
+                state.success = true;
+            })
+            .addCase(createPost.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            //deletePost
+            .addCase(deletePost.pending, state => {
+                state.loading = true;
+            })
+            .addCase(deletePost.fulfilled, (state, action) => {
+                state.posts = state.posts.filter(post => post.id !== action.payload);
+            })
+            .addCase(deletePost.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            //fetchAllPosts
+            .addCase(fetchAllPosts.pending, state => {
+                state.loading = true;
+            })
+            .addCase(fetchAllPosts.fulfilled, (state, action) => {
+                state.loading = false;
+                state.posts = action.payload;
+                state.success = true;
+            })
+            .addCase(fetchAllPosts.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            //fetchPost
+            .addCase(fetchPost.pending, state => {
+                state.loading = true;
+            })
+            .addCase(fetchPost.fulfilled, (state, action) => {
+                state.loading = false;
+                state.searchedPost = action.payload;
+                localStorage.setItem('post', JSON.stringify(action.payload));
+                state.success = true;
+            })
+            .addCase(fetchPost.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            //likePost
+            .addCase(likePost.pending, state => {
+                state.loading = true;
+            })
+            .addCase(likePost.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                //Code below updates the liked post
+                const updated = action.payload;
+                state.posts = state.posts.map(post => post.id === updated.id ? updated : post);
+                if (state.searchedPost?.id === updated.id) {
+                    state.searchedPost = updated;
+                }
+            })
+            .addCase(likePost.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
+    },
+});
+
+export const { resetPostState } = postsSlice.actions;
+
+export default postsSlice.reducer;

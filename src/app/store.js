@@ -1,7 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
+import postReducer from '../features/Post/postSlice';
+import submedditReducer from '../features/Submeddits/submedditSlice';
+import userReducer from '../features/User/userSlice';
+import commentReducer from '../features/Comment/commentSlice';
 
 export const store = configureStore({
-    reducer: {},
+    reducer: {
+        postReducer,
+        submedditReducer,
+        userReducer,
+        commentReducer
+    },
 });
 
 export default store;
