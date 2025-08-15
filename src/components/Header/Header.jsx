@@ -56,8 +56,8 @@ const Header = () => {
             )}
 
             <div className='logo-container'>
-                <img src='/images/logo.jpg' alt='Meddit Logo Full' className='logo' />
-                <img src='/images/logo-small.png' alt='Meddit Logo Small' className='logo-small' />
+                <img src='/logo180A.svg' alt='Meddit' className='logo' />
+                <img src='/logo200.svg' alt='Meddit' className='logo-small' />
             </div>
 
             <form className='search-container' onSubmit={handleSearchSubmit}>

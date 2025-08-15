@@ -5,7 +5,7 @@
 .header {
     display: grid;
     align-items: center;
-    background-color: #FF3939;
+    background-color: black;
     padding: 0.5rem;
     width: 100%;
     position: fixed;
@@ -13,21 +13,29 @@
     left: 0;
     grid-template-areas: 'logo search create login';
     grid-template-columns: 1fr 5fr 1fr 1fr;
-    min-height: 80px;
+    max-height: 90px;
     box-sizing: border-box;
     gap: 1rem;
 }
 
 .logo-container {
     grid-area: logo;
-    justify-self: center;
+    width: auto;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*justify-self: center;*/
 }
 
 .logo,
 .logo-small {
-    max-height: 50px;
+    max-width: 500px;
+    max-height: 100%;
+    object-fit: contain;
+    /*max-height: 50px;
     width: auto;
-    display: block;
+    display: block;*/
 }
 
 .logo-small {
