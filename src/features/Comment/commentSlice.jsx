@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
-import { setGlobalLoading } from '../../shared/uiSlice';
 
 
 const comment = JSON.parse(localStorage.getItem('comment'));
@@ -9,14 +8,11 @@ const comment = JSON.parse(localStorage.getItem('comment'));
 export const createComment = createAsyncThunk('comments/createComment', async (commentData, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await commentsAPI.createComment(commentData);
+        const data = await { API_ROOT }.createComment(commentData);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Failed to create comment');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -24,14 +20,11 @@ export const createComment = createAsyncThunk('comments/createComment', async (c
 export const deleteComment = createAsyncThunk('comments/deleteComment', async (commentId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await commentsAPI.deleteComment(commentId);
+        const data = await { API_ROOT }.deleteComment(commentId);
         return commentId; //Return the ID so it can be removed from state
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Unable to delete comment');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -39,14 +32,11 @@ export const deleteComment = createAsyncThunk('comments/deleteComment', async (c
 export const fetchAllComments = createAsyncThunk('comments/fetchAll', async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await commentsAPI.fetchAllComments();
+        const data = await { API_ROOT }.fetchAllComments();
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Comments not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
   });
 
@@ -54,14 +44,11 @@ export const fetchAllComments = createAsyncThunk('comments/fetchAll', async (_, 
 export const fetchComment = createAsyncThunk('comments/fetchComment', async (commentId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await commentsAPI.fetchComment(commentId);
+        const data = await { API_ROOT }.fetchComment(commentId);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Comment not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -69,13 +56,10 @@ export const fetchComment = createAsyncThunk('comments/fetchComment', async (com
 export const likeComment = createAsyncThunk('comments/likeComment', async (commentId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
-        const data = await commentsAPI.likeComment(commentId);
+        const data = await { API_ROOT }.likeComment(commentId);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Unable to like comment')
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 

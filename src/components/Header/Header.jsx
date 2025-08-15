@@ -1,7 +1,7 @@
 //Site header with logo, login, and searchbar
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreatePost from '../../features/Post/CreatePost';
+import CreatePost from '../../features/post/CreatePost';
 import './Header.css';
 
 const Header = () => {

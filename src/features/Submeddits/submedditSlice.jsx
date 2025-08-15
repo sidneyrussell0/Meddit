@@ -1,36 +1,29 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
-import { setGlobalLoading } from '../../shared/uiSlice';
 
 const submeddit = JSON.parse(localStorage.getItem('submeddit'));
 
 //createSubmeddit
-export const createSubmeddit = createAsyncThunk('submeddits/createSubmeddit', async (submedditData, thunkAPI) => {
+export const createSubmeddit = createAsyncThunk('submeddit/createSubmeddit', async (submedditData, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await submedditsAPI.createSubmeddit(submedditData);
+        const data = await { API_ROOT }.createSubmeddit(submedditData);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Failed to create Submeddit');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
 //deleteSubmeddit
-export const deleteSubmeddit = createAsyncThunk('submeddits/deleteSubmeddit', async (submedditId, thunkAPI) => {
+export const deleteSubmeddit = createAsyncThunk('submeddit/deleteSubmeddit', async (submedditId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await submedditsAPI.deleteSubmeddit(submedditId);
+        const data = await { API_ROOT }.deleteSubmeddit(submedditId);
         return submedditId; //Return the ID so it can be removed from state
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Unable to delete Submeddit');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -38,29 +31,23 @@ export const deleteSubmeddit = createAsyncThunk('submeddits/deleteSubmeddit', as
 export const fetchAllSubmeddits = createAsyncThunk('submeddits/fetchAll', async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await submedditsAPI.fetchAllSubmeddits();
+        const data = await { API_ROOT }.fetchAllSubmeddits();
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Submeddits not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
   });
 
 //fetchSubmeddit
-export const fetchSubmeddit = createAsyncThunk('submeddits/fetchSubmeddit', async (submedditId, thunkAPI) => {
+export const fetchSubmeddit = createAsyncThunk('submeddit/fetchSubmeddit', async (submedditId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await submedditsAPI.fetchSubmeddit(submedditId);
+        const data = await { API_ROOT }.fetchSubmeddit(submedditId);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Submeddit not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -68,18 +55,15 @@ export const fetchSubmeddit = createAsyncThunk('submeddits/fetchSubmeddit', asyn
 export const followSubmeddit = createAsyncThunk('submeddit/followSubmeddit', async (submedditId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await submedditsAPI.followSubmeddit(submedditId);
+        const data = await { API_ROOT }.followSubmeddit(submedditId);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Unable to follow Submeddit')
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
-const submedditsSlice = createSlice({
+const submedditSlice = createSlice({
     name: 'submeddit',
     initialState: {
         submeddits: [],
@@ -171,6 +155,6 @@ const submedditsSlice = createSlice({
     },
 });
 
-export const { resetSubmedditState } = submedditsSlice.actions;
+export const { resetSubmedditState } = submedditSlice.actions;
 
-export default submedditsSlice.reducer;
+export default submedditSlice.reducer;

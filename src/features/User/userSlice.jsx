@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
-import { setGlobalLoading } from '../../shared/uiSlice';
+
 
 const profile = JSON.parse(localStorage.getItem('profile'));
 
@@ -8,14 +8,11 @@ const profile = JSON.parse(localStorage.getItem('profile'));
 export const fetchAllProfiles = createAsyncThunk('user/fetchAll', async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await userAPI.fetchAllProfiles();
+        const data = await { API_ROOT }.fetchAllProfiles();
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Failed to load profiles');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
   });
 
@@ -23,14 +20,11 @@ export const fetchAllProfiles = createAsyncThunk('user/fetchAll', async (_, thun
 export const fetchProfile = createAsyncThunk('user/fetchProfile', async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await userAPI.fetchProfile();
+        const data = await { API_ROOT }.fetchProfile();
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Failed to load profile');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -38,14 +32,11 @@ export const fetchProfile = createAsyncThunk('user/fetchProfile', async (_, thun
 export const loadUserByEmail = createAsyncThunk('user/loadUserByEmail', async (email, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await userAPI.getUserByEmail(email);
+        const data = await { API_ROOT }.getUserByEmail(email);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'User not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -53,14 +44,11 @@ export const loadUserByEmail = createAsyncThunk('user/loadUserByEmail', async (e
 export const followUser = createAsyncThunk('user/followUser', async (email, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await userAPI.followUser(email);
+        const data = await { API_ROOT }.followUser(email);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Failed to follow user')
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 

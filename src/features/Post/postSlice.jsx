@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
-import { setGlobalLoading } from '../../shared/uiSlice';
 
 
 const post = JSON.parse(localStorage.getItem('post'));  
@@ -9,14 +8,11 @@ const post = JSON.parse(localStorage.getItem('post'));
 export const createPost = createAsyncThunk('posts/createPost', async (postData, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await postsAPI.createPost(postData);
+        const data = await { API_ROOT }.createPost(postData);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Failed to create post');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -24,14 +20,11 @@ export const createPost = createAsyncThunk('posts/createPost', async (postData, 
 export const deletePost = createAsyncThunk('posts/deletePost', async (postId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await postsAPI.deletePost(postId);
+        const data = await { API_ROOT }.deletePost(postId);
         return postId; //Return the ID so it can be removed from state
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Unable to delete post');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -39,14 +32,11 @@ export const deletePost = createAsyncThunk('posts/deletePost', async (postId, th
 export const fetchAllPosts = createAsyncThunk('posts/fetchAll', async (_, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await postsAPI.fetchAllPosts();
+        const data = await { API_ROOT }.fetchAllPosts();
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Posts not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
   });
 
@@ -54,14 +44,11 @@ export const fetchAllPosts = createAsyncThunk('posts/fetchAll', async (_, thunkA
 export const fetchPost = createAsyncThunk('posts/loadPost', async (postId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await postsAPI.fetchPost(postId);
+        const data = await { API_ROOT}.fetchPost(postId);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Post not found');
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -69,14 +56,11 @@ export const fetchPost = createAsyncThunk('posts/loadPost', async (postId, thunk
 export const likePost = createAsyncThunk('posts/likePost', async (postId, thunkAPI) => {
     const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
 
-        const data = await postsAPI.likePost(postId);
+        const data = await { API_ROOT}.likePost(postId);
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message || 'Unable to like post')
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
