@@ -1,54 +1,50 @@
+//Check Slice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
 
-
-const profile = JSON.parse(localStorage.getItem('profile'));
-
 //fetchAllProfiles
 export const fetchAllProfiles = createAsyncThunk('user/fetchAll', async (_, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.fetchAllProfiles();
-        return data;
+        const res = await fetch(`${API_ROOT}/user`);
+        if (!res.ok) throw new Error('Unable to fetch users');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Failed to load profiles');
+        return thunkAPI.rejectWithValue(error.message);
     }
   });
 
 //fetchProfile
-export const fetchProfile = createAsyncThunk('user/fetchProfile', async (_, thunkAPI) => {
-    const { dispatch } = thunkAPI;
+export const fetchProfile = createAsyncThunk('user/fetchProfile', async (userId, thunkAPI) => {
     try {
-
-        const data = await { API_ROOT }.fetchProfile();
-        return data;
+        const res = await fetch(`${API_ROOT}/user/${userId}`);
+        if (!res.ok) throw new Error('Unable to fetch user');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Failed to load profile');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //loadUserByEmail
 export const loadUserByEmail = createAsyncThunk('user/loadUserByEmail', async (email, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.getUserByEmail(email);
-        return data;
+        const res = await fetch(`${API_ROOT}/user/${email}`);
+        if (!res.ok) throw new Error('Unable to load user');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'User not found');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //followUser
 export const followUser = createAsyncThunk('user/followUser', async (email, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.followUser(email);
-        return data;
+        const res = await fetch(`${API_ROOT}/user/${email}/follow`, {
+            method: 'POST',
+        });
+        if (!res.ok) throw new Error('Unable to follow user');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Failed to follow user')
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
@@ -57,7 +53,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         profiles: [],
-        currentUser: profile || null,
+        currentUser: null,
         searchedUser: null,
         loading: false,
         error: null,
@@ -72,65 +68,67 @@ const userSlice = createSlice({
         },
     },
     extraReducers: builder => {
+        const setPending = (state) => {
+            state.loading = true;
+            state.error = null;
+            state.success = false;
+        };
+        const setRejected = (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        };
+
         builder
             //fetchAllProfiles
-            .addCase(fetchAllProfiles.pending, state => {
-                state.loading = true;
-            })
+            .addCase(fetchAllProfiles.pending, setPending)
             .addCase(fetchAllProfiles.fulfilled, (state, action) => {
                 state.loading = false;
-                state.profiles = action.payload;
                 state.success = true;
+                state.profiles = action.payload;
             })
-            .addCase(fetchAllProfiles.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(fetchAllProfiles.rejected, setRejected)
+
             //fetchProfile
-            .addCase(fetchProfile.pending, state => {
-                state.loading = true;
-            })
+            .addCase(fetchProfile.pending, setPending)
             .addCase(fetchProfile.fulfilled, (state, action) => {
                 state.loading = false;
-                state.currentUser = action.payload;
-                localStorage.setItem('profile', JSON.stringify(action.payload));
                 state.success = true;
+                state.currentUser = action.payload;
             })
-            .addCase(fetchProfile.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(fetchProfile.rejected, setRejected)
+
             //loadUserByEmail
-            .addCase(loadUserByEmail.pending, state => {
-                state.loading = true;
-            })
+            .addCase(loadUserByEmail.pending, setPending)
             .addCase(loadUserByEmail.fulfilled, (state, action) => {
                 state.loading = false;
-                state.searchedUser = action.payload;
                 state.success = true;
+                state.searchedUser = action.payload;
             })
-            .addCase(loadUserByEmail.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(loadUserByEmail.rejected, setRejected)
+
             //followUser
-            .addCase(followUser.pending, state => {
-                state.loading = true;
-            })
+            .addCase(followUser.pending, setPending)
             .addCase(followUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                //Code below updates the profile when followed
                 const updated = action.payload;
-                state.profiles = state.profiles.map(profile => profile.id === updated.id ? updated : profile);
-                if (state.searchedUser?.id === updated.id) {
+                const matchId = updated.id || updated._id;
+
+                //Update profiles list
+                state.profiles = state.profiles.map((p) =>
+                    (profiles.id || profiles._id) === matchId ? updated : profiles);
+
+                //Update searchedUser if it's the same one
+                if (state.searchedUser && (state.searchedUser.id || state.searchedUser._id) === matchId) {
                     state.searchedUser = updated;
                 }
+
+                //Update currentUser if it's the same one
+                if (state.currentUser && (state.currentUser.id || state.currentUser._id) === matchId) {
+                    state.currentUser = updated;
+                }
             })
-            .addCase(followUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
+            .addCase(followUser.rejected, setRejected);
     },
 });
 

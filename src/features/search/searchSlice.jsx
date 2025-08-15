@@ -1,28 +1,15 @@
+//Check Slice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
+import { API_ROOT } from '../../app/reddit';
 
 //search
 export const searchPosts = createAsyncThunk('search/fetchResults', async (searchTerm, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-        dispatch(setGlobalLoading(true));
-
-        const response = await fetch(
-            `http://localhost:5000/api/search?q=${encodeURIComponent(searchTerm)}`,
-            { credentials: 'include', } //send cookies for auth
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch');
-        }
-
-        const data = await response.json();
-
-        return data;
+        const res = await fetch(`${API_ROOT}/search/${encodeURIComponent(searchTerm)}`);
+        if (!res.ok) throw new Error('Unable to search post');
+        return await res.json();
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
-    } finally {
-        dispatch(setGlobalLoading(false));
     }
 });
 
@@ -32,6 +19,7 @@ const searchSlice = createSlice({
         results: [],
         loading: false,
         error: null,
+        success: false,
         searchTerm: '',
     },
     reducers: {
@@ -39,6 +27,8 @@ const searchSlice = createSlice({
             state.loading = false;
             state.error = null;
             state.success = false;
+            state.searchTerm = '',
+            state.results = [];
         },
     },
     extraReducers: (builder) => {
@@ -46,14 +36,17 @@ const searchSlice = createSlice({
             .addCase(searchPosts.pending, (state, action) => {
                 state.loading = true;
                 state.error = null;
+                state.success = false;
+                state.searchTerm = action.meta.arg;
             })
             .addCase(searchPosts.fulfilled, (state, action) => {
                 state.loading = false;
+                state.success = true;
                 state.results = action.payload;
             })
             .addCase(searchPosts.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
             });
     },
 });

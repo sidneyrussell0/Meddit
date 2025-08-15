@@ -1,65 +1,67 @@
+//Check Slice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
 
-const submeddit = JSON.parse(localStorage.getItem('submeddit'));
-
 //createSubmeddit
 export const createSubmeddit = createAsyncThunk('submeddit/createSubmeddit', async (submedditData, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.createSubmeddit(submedditData);
-        return data;
+        const res = await fetch(`${API_ROOT}/submeddit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(submedditData),
+        });
+        if (!res.ok) throw new Error('Failed to create Submeddit')
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Failed to create Submeddit');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //deleteSubmeddit
 export const deleteSubmeddit = createAsyncThunk('submeddit/deleteSubmeddit', async (submedditId, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.deleteSubmeddit(submedditId);
+        const res = await fetch(`${API_ROOT}/submeddit/${submedditId}`, {
+            method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Unable to delete Submeddit');
         return submedditId; //Return the ID so it can be removed from state
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Unable to delete Submeddit');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //fetchAllSubmeddits
-export const fetchAllSubmeddits = createAsyncThunk('submeddits/fetchAll', async (_, thunkAPI) => {
-    const { dispatch } = thunkAPI;
+export const fetchAllSubmeddits = createAsyncThunk('submeddit/fetchAll', async (_, thunkAPI) => {
     try {
-
-        const data = await { API_ROOT }.fetchAllSubmeddits();
-        return data;
+        const res = await fetch(`${API_ROOT}/submeddit`);
+        if (!res.ok) throw new Error('Failed to fetch Submeddits');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Submeddits not found');
+        return thunkAPI.rejectWithValue(error.message);
     }
   });
 
 //fetchSubmeddit
 export const fetchSubmeddit = createAsyncThunk('submeddit/fetchSubmeddit', async (submedditId, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.fetchSubmeddit(submedditId);
-        return data;
+        const res = await fetch(`${API_ROOT}/submeddit/${submedditId}`);
+        if (!res.ok) throw new Error('Submeddit not found');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Submeddit not found');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //followSubmeddit
 export const followSubmeddit = createAsyncThunk('submeddit/followSubmeddit', async (submedditId, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.followSubmeddit(submedditId);
-        return data;
+        const res = await fetch(`${API_ROOT}/submeddit/${submedditId}/follow`, {
+            method: 'POST',
+        });
+        if (!res.ok) throw new Error('Unable to follow Submeddit');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Unable to follow Submeddit')
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
@@ -67,7 +69,7 @@ const submedditSlice = createSlice({
     name: 'submeddit',
     initialState: {
         submeddits: [],
-        searchedSubmeddit: submeddit || null,
+        searchedSubmeddit: null,
         loading: false,
         error: null,
         success: false,
@@ -81,63 +83,55 @@ const submedditSlice = createSlice({
         },
     },
     extraReducers: builder => {
+        const setPending = (state) => {
+            state.loading = true;
+            state.error = null;
+            state.success = false;
+        };
+        const setRejected = (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        };
+
         builder
             //createSubmeddit
-            .addCase(createSubmeddit.pending, state => {
-                state.loading = true;
-            })
+            .addCase(createSubmeddit.pending, setPending)
             .addCase(createSubmeddit.fulfilled, (state, action) => {
                 state.loading = false;
-                state.submeddits.push(action.payload);
-                state.error = null;
                 state.success = true;
+                state.submeddits.push(action.payload);
             })
-            .addCase(createSubmeddit.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(createSubmeddit.rejected, setRejected)
+
             //deleteSubmeddit
-            .addCase(deleteSubmeddit.pending, state => {
-                state.loading = true;
-            })
+            .addCase(deleteSubmeddit.pending, setPending)
             .addCase(deleteSubmeddit.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
                 state.submeddits = state.submeddits.filter(submeddit => submeddit.id !== action.payload);
             })
-            .addCase(deleteSubmeddit.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(deleteSubmeddit.rejected, setRejected)
+
             //fetchAllSubmeddits
-            .addCase(fetchAllSubmeddits.pending, state => {
-                state.loading = true;
-            })
+            .addCase(fetchAllSubmeddits.pending, setPending)
             .addCase(fetchAllSubmeddits.fulfilled, (state, action) => {
                 state.loading = false;
-                state.submeddits = action.payload;
                 state.success = true;
+                state.submeddits = action.payload;
             })
-            .addCase(fetchAllSubmeddits.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(fetchAllSubmeddits.rejected, setRejected)
+
             //fetchSubmeddit
-            .addCase(fetchSubmeddit.pending, state => {
-                state.loading = true;
-            })
+            .addCase(fetchSubmeddit.pending, setPending)
             .addCase(fetchSubmeddit.fulfilled, (state, action) => {
                 state.loading = false;
-                state.searchedSubmeddit = action.payload;
-                localStorage.setItem('submeddit', JSON.stringify(action.payload));
                 state.success = true;
+                state.searchedSubmeddit = action.payload;
             })
-            .addCase(fetchSubmeddit.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(fetchSubmeddit.rejected, setRejected)
+
             //followSubmeddit
-            .addCase(followSubmeddit.pending, state => {
-                state.loading = true;
-            })
+            .addCase(followSubmeddit.pending, setPending)
             .addCase(followSubmeddit.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
@@ -148,10 +142,7 @@ const submedditSlice = createSlice({
                     state.searchedSubmeddit = updated;
                 }
             })
-            .addCase(followSubmeddit.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
+            .addCase(followSubmeddit.rejected, setRejected);
     },
 });
 

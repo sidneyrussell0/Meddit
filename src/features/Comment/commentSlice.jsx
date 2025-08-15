@@ -1,65 +1,67 @@
+//Check Slice
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_ROOT } from '../../app/reddit';
 
-
-const comment = JSON.parse(localStorage.getItem('comment'));
-
 //createComment
 export const createComment = createAsyncThunk('comments/createComment', async (commentData, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.createComment(commentData);
-        return data;
+        const res = await fetch(`${API_ROOT}/comments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(commentData),
+        });
+        if (!res.ok) throw new Error('Failed to create comment')
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Failed to create comment');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //deleteComment
 export const deleteComment = createAsyncThunk('comments/deleteComment', async (commentId, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.deleteComment(commentId);
+        const res = await fetch(`${API_ROOT}/comments/${commentId}`, {
+            method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Unable to delete comment');
         return commentId; //Return the ID so it can be removed from state
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Unable to delete comment');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //fetchAllComments
 export const fetchAllComments = createAsyncThunk('comments/fetchAll', async (_, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.fetchAllComments();
-        return data;
+        const res = await fetch(`${API_ROOT}/comments`);
+        if (!res.ok) throw new Error('Failed to fetch comments');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Comments not found');
+        return thunkAPI.rejectWithValue(error.message);
     }
   });
 
 //fetchComment
 export const fetchComment = createAsyncThunk('comments/fetchComment', async (commentId, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-
-        const data = await { API_ROOT }.fetchComment(commentId);
-        return data;
+        const res = await fetch(`${API_ROOT}/comments/${commentId}`);
+        if (!res.ok) throw new Error('Comment not found');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Comment not found');
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
 //likeComment
 export const likeComment = createAsyncThunk('comments/likeComment', async (commentId, thunkAPI) => {
-    const { dispatch } = thunkAPI;
     try {
-        const data = await { API_ROOT }.likeComment(commentId);
-        return data;
+        const res = await fetch(`${API_ROOT}/comments/${commentId}/like`, {
+            method: 'POST',
+        });
+        if (!res.ok) throw new Error('Unable to like comment');
+        return await res.json();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || 'Unable to like comment')
+        return thunkAPI.rejectWithValue(error.message);
     }
 });
 
@@ -81,63 +83,53 @@ const commentSlice = createSlice({
         },
     },
     extraReducers: builder => {
+        const setPending = (state) => {
+            state.loading = true;
+            state.error = null;
+            state.success = false;
+        };
+        const setRejected = (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        };
+
         builder
             //createComment
-            .addCase(createComment.pending, state => {
-                state.loading = true;
-            })
+            .addCase(createComment.pending, setPending)
             .addCase(createComment.fulfilled, (state, action) => {
-                state.loading = false;
+                loading = false;
+                success = true;
                 state.comments.push(action.payload);
-                state.error = null;
-                state.success = true;
             })
-            .addCase(createComment.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(createComment.rejected, setRejected)
+
             //deleteComment
-            .addCase(deleteComment.pending, state => {
-                state.loading = true;
-            })
+            .addCase(deleteComment.pending, setPending)
             .addCase(deleteComment.fulfilled, (state, action) => {
                 state.comments = state.comments.filter(comment => comment.id !== action.payload);
             })
-            .addCase(deleteComment.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(deleteComment.rejected, setRejected)
+
             //fetchAllComments
-            .addCase(fetchAllComments.pending, state => {
-                state.loading = true;
-            })
+            .addCase(fetchAllComments.pending, setPending)
             .addCase(fetchAllComments.fulfilled, (state, action) => {
                 state.loading = false;
                 state.comments = action.payload;
                 state.success = true;
             })
-            .addCase(fetchAllComments.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(fetchAllComments.rejected, setRejected)
+
             //fetchComment
-            .addCase(fetchComment.pending, state => {
-                state.loading = true;
-            })
+            .addCase(fetchComment.pending, setPending)
             .addCase(fetchComment.fulfilled, (state, action) => {
-                state.loading = false;
+                loading = false;
+                success = true;
                 state.searchedComment = action.payload;
-                localStorage.setItem('comment', JSON.stringify(action.payload));
-                state.success = true;
             })
-            .addCase(fetchComment.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            .addCase(fetchComment.rejected, setRejected)
+
             //likeComment
-            .addCase(likeComment.pending, state => {
-                state.loading = true;
-            })
+            .addCase(likeComment.pending, setPending)
             .addCase(likeComment.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
@@ -148,10 +140,7 @@ const commentSlice = createSlice({
                     state.searchedComment = updated;
                 }
             })
-            .addCase(likeComment.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
+            .addCase(likeComment.rejected, setRejected);
     },
 });
 
