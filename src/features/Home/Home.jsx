@@ -3,11 +3,11 @@
 import React, { useEffect } from 'react';
 import './Home.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllComments } from '../features/comments/commentsSlice';
-import { fetchAllPosts } from '../features/posts/postsSlice';
-import { fetchAllSubmeddits } from '../features/submeddits/submedditsSlice';
-import CreatePost from '../features/posts/CreatePost';
-import PostThread from '../features/posts/PostThread';
+import { fetchAllComments } from '../Comment/commentSlice';
+import { fetchAllPosts } from '../Post/postSlice';
+import { fetchAllSubmeddits } from '../Submeddits/submedditSlice';
+/*import CreatePost from '../Post/CreatePost';*/
+import PostThread from '../Post/PostThread';
 
 
 const Home = () => {
