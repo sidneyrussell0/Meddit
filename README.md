@@ -5,7 +5,7 @@ This is a react-based web application that allows users to browse and search *Me
 
 ## Wireframe
 Image of the figma wireframe below
-![Wireframe] WIREFRAME IMAGE
+![Wireframe] (/public/MedditWireFrame.png)
 
 ## Features
 ### General Features
