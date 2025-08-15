@@ -3,12 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Loading from '../../shared/utilities/LoadingSpinner';
 
 const SubmedditPage = () => {
     const { name } = useParams();
     const [submeddit, setSubmeddit] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchSubmeddit = async () => {
@@ -29,15 +27,12 @@ const SubmedditPage = () => {
             } catch (err) {
                 console.error(err);
                 alert('Failed to load Submeddit');
-            } finally {
-                setLoading(false);
             }
         };
 
         fetchSubmeddit();
     }, [name]);
 
-    if (loading) return <Loading />
     if (!submeddit) return <p>Submeddit not found.</p>;
 
     return (
