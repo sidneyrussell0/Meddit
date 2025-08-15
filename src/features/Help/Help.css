@@ -1,0 +1,50 @@
+.help-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    color: white;
+}
+
+.help-container h1 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+    border: 1px solid red;
+    padding-top: 6px;
+    padding-bottom: 10px;
+}
+
+.help-text h2 {
+    margin-top: 2rem;
+    border-bottom: 1px solid #4e4e4e7f;
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+.help-text p {
+    max-width: 600px;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.help-text ul {
+    list-style: disc inside;
+    max-width: 400px;
+    padding-left: 0;
+    margin: 0.5rem 0;
+}
+
+.help-text p a {
+    color: white;
+    text-decoration: underline;
+}
+
+.help-text p a:visited {
+    color: red;
+}
+
+.help-text p a:hover {
+    color: red;
+}
