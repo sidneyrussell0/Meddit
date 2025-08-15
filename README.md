@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Meddit Portfolio Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Overview
+This is a react-based web application that allows users to browse and search *Meddit* posts. This project demonstrates the use of modern React features, including hooks, state management with Redux, routing with React Router, and API integration.
 
-## Available Scripts
+## Wireframe
+Image of the figma wireframe below
+![Wireframe] WIREFRAME IMAGE
 
-In the project directory, you can run:
+## Features
+### General Features
+- Browse top posts from Reddit.
+- Search for posts by keywords.
+- Responsive design for mobile and desktop.
+- Easy-to-use interface.
 
-### `npm start`
+### Header Component
+ - Displayes the application logo and title.
+ - Includes a search form for searching *Meddit* posts.
+ - Provides a menu botton to toggle the visibility of the subreddit navigation.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Auth Component
+- Something 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Comments Component
+- Anything
 
-### `npm test`
+### Posts Component
+- Anything
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Subreddits Component
+- Displays a list of subreddits.
+- Allows users to select a subreddit, fetch its posts, and navigate to the home page.
+- Highlights the currectly active subreddit.
+- Clears the search term when a new subreddit is selected.
 
-### `npm run build`
+### Users Component
+- ABC
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### State Management
+- Fetches posts from a specified subreddit using the Reddit API.
+- Fetches comments for a specific Reddit post using the Reddit API.
+- Stores and manages fetched data in the Redux store.
+- Provides actions for setting and clearing a search term.
+- Includes selectors for accessing and filtering data based on the search term.
+- Handles loading and error states during API calls.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technologies Used
+- CSS
+- JavaScript
+- React
+- Redux Toolkit
+- React Router
+- Reddit API
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
+The instructions below will demonstrate how to set up the project locally.
 
-### `npm run eject`
+### Installation
+- In your terminal, run:
+`npm install npm@latest -g`
+- Clone the repository:
+`git clone https://github.com/sidneyrussell58/Meddit.git`
+- Install NPM packages:
+`npm install`
+- Run app in development mode in local browser:
+`npm start`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Usage
+1. Start the development server using `npm start`.
+2. Open http:/localhost:3000 in your browser.
+3. Create an account, log in, use the search bar to find specific posts or browse the default feed.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
+This is where you tell other developers what they can and cannot do with your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Troubleshooting Tips
+This is **bold text**.
+This is *italic*.
+This is ***really important text***.
+> This is a blockquote.
