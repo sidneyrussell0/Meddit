@@ -1,0 +1,18 @@
+footer {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    align-self: flex-end;
+    margin-left: auto;
+    width: fit-content;
+}
+
+footer p {
+    display: inline-block;
+    text-align: center;
+    font-size: 0.7rem;
+    margin: 0;
+}

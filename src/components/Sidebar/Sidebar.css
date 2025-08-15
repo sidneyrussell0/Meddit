@@ -1,0 +1,47 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 57, 57, 0.75);
+    height: 210px;
+    text-align: center;
+    margin: 1rem;
+}
+
+.sidebar h2 {
+    color: white;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.side-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    margin-left: 2rem;
+    padding: 0;
+    font-size: 0.9rem;
+    text-align: justify;
+    width: 100%;
+    box-sizing: border-box;
+    
+}
+
+.side-links a {
+    color: white;
+    text-decoration: none;
+    
+}
+
+.see-more a {
+    color: white;
+    text-decoration: underline;
+}
+
+.see-more {
+    margin-top: 1.2rem;
+    margin-right: 8.75rem;
+    font-size: 0.75rem;
+   
+}

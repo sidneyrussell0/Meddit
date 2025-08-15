@@ -1,0 +1,93 @@
+.nav {
+    display: flex;
+    padding: 0.1rem;
+    text-align: left;
+    color: white;
+}
+
+.home {
+    width: 100%;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+    padding-left: 3rem;
+    background-color: rgba(255, 57, 57, 0.75);
+}
+
+.topics h2 {
+    margin-left: -1.5rem;
+    font-size: 1.3rem;
+}
+
+.topics {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: .01rem;
+    padding-bottom: 1.2rem;
+    padding-left: 3rem;
+    padding-right: 5.5rem;
+    background-color: rgba(255, 57, 57, 0.75);
+    font-size: 0.8rem;
+}
+
+.about {
+    width: 100%;
+    margin: 0;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+    padding-left: 3rem;
+    background-color: rgba(255, 57, 57, 0.75);
+}
+
+.nav-links ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    
+}
+
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    position: fixed;
+    z-index: 10;
+}
+
+/* Smaller Screens */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: rgb(255, 57, 57);
+        position: absolute;
+        top: 75px;
+        left: 0;
+        padding: 1rem;
+        justify-content: center;
+    }
+
+    .topics {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
