@@ -2,40 +2,35 @@
 //ADD CREATE POST LINK
 
 //Main
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import ErrorMessage from '../shared/utilities/Error/ErrorMessage';
-import { clearError } from '../shared/utilities/Error/errorSlice';
-import Loading from '../shared/utilities/LoadingSpinner';
+/*import { useDispatch, useSelector } from 'react-redux';*/
+/*import Loading from '../shared/utilities/LoadingSpinner';*/
 import './App.css';
 
 //Home&Layout
-import Home from '../shared/Home';
-import Layout from '../shared/layout/Layout';
+import Home from './features/Home/Home';
+/*import Layout from '../shared/layout/Layout';*/
 
 //Nav
-import About from '../features/about/About';
-import Help from '../features/help/Help';
-import Settings from '../features/settings/Settings';
+import About from './features/About/About';
+import Help from './features/Help/Help';
+import Settings from './features/Settings/Settings';
 
 //Features
-import AuthForm from '../features/auth/Auth';
-import PostDetail from '../features/posts/PostDetail';
-import SearchResults from '../features/search/SearchResults';
-import SubmedditPage from '../features/submeddits/SubmedditPage';
-import Submeddits from '../features/submeddits/Submeddits';
-import TopicPage from '../features/topics/TopicPage';
-import UserProfile from '../features/users/UserProfile';
+import Post from '../src/features/Post/Post';
+/*import SearchResults from '../features/search/SearchResults';*/
+import Submeddits from '../src/features/Submeddits/Submeddits';
+import User from '../src/features/User/User';
 
 
 function App() {
-    const dispatch = useDispatch();
+    /*const dispatch = useDispatch();
     const errorMessage = useSelector((state) => state.error.message);
-    const globalLoading = useSelector((state) => state.ui.globalLoading);
+    const globalLoading = useSelector((state) => state.ui.globalLoading);*/
 
     //Backend OAuth
-    useEffect(() => {
+    /*useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
         const username = params.get('username');
@@ -49,24 +44,18 @@ function App() {
         if (token || username) {
             window.history.replaceState({}, document.title, '/');
         }
-      }, []);
+      }, []); */
 
     return(
         <>
-            <ErrorMessage 
-                message={errorMessage}
-                onClose={() => dispatch(clearError())}
-            />
-            {globalLoading && <Loading />}
             <Router>
                 <Routes>
-                    <Route path="/" element={<Layout />}>
+            
                         {/* Home/Main */}
                         <Route path="/" element={<Home />} />
 
                         {/* Header */}
-                        <Route path="/login" element={<AuthForm />} />
-                        <Route path="/search" element={<SearchResults />} />
+                        
 
                         {/* Nav */}
                         <Route path="/about" element={<About />} />
@@ -74,12 +63,9 @@ function App() {
                         <Route path="/settings" element={<Settings />} />
 
                         {/* Features */}
-                        <Route path='/posts/:id' element={<PostDetail />} />
+                        <Route path='/posts/:id' element={<Post />} />
                         <Route path="/m/:submeddit" element={<Submeddits />} />
-                        <Route path="/m/:submeddit/:name" element={<SubmedditPage />} />
-                        <Route path='/topics/:topic' element={<TopicPage />} />
-                        <Route path="/u/:username" element={<UserProfile />} />
-                    </Route>
+                        <Route path="/u/:username" element={<User />} />
 
                     {/* Outside layout */}
                     <Route path="*" element={<div>404 Not Found</div>} />
