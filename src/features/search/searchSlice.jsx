@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+
 //search
 export const searchPosts = createAsyncThunk('search/fetchResults', async (searchTerm, thunkAPI) => {
     const { dispatch } = thunkAPI;

@@ -1,6 +1,6 @@
 //Make the settings usable
 import React, { useState } from 'react';
-import Header from '../../components/Header/Header';
+import Header from '../../components/header/Header';
 import './Settings.css';
 
 const Settings = () => {

@@ -9,19 +9,19 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 //Home&Layout
-import Home from './features/Home/Home';
+import Home from './features/home/Home';
 /*import Layout from '../shared/layout/Layout';*/
 
 //Nav
-import About from './features/About/About';
-import Help from './features/Help/Help';
-import Settings from './features/Settings/Settings';
+import About from './features/about/About';
+import Help from './features/help/Help';
+import Settings from './features/settings/Settings';
 
 //Features
-import Post from '../src/features/Post/Post';
+import Post from './features/post/Post';
 /*import SearchResults from '../features/search/SearchResults';*/
-import Submeddits from '../src/features/Submeddits/Submeddits';
-import User from '../src/features/User/User';
+import Submeddits from './features/submeddits/Submeddits';
+import User from './features/user/User';
 
 
 function App() {
