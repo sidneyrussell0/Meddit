@@ -65,7 +65,7 @@ export const likePost = createAsyncThunk('posts/likePost', async (postId, thunkA
 });
 
 
-const postsSlice = createSlice({
+const postSlice = createSlice({
     name: 'posts',
     initialState: {
         posts: [],
@@ -157,6 +157,6 @@ const postsSlice = createSlice({
     },
 });
 
-export const { resetPostState } = postsSlice.actions;
+export const { resetPostState } = postSlice.actions;
 
-export default postsSlice.reducer;
+export default postSlice.reducer;
