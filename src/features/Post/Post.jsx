@@ -1,63 +1,54 @@
 //Shows full post content plus comments
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSubredditPosts, fetchComments } from './postSlice';
 import { useParams } from 'react-router-dom';
+import './Post.css';
 
-const mockPosts = [
-    { id: '1', title: 'First Post', body: 'This is the first post.', author: 'user1', likes: 5 },
-    //add more for testing
-];
+const Post = () => {
+    const dispatch = useDispatch();
+    const { subreddit } = useParams();
+    const { posts, comments, loading, error } = useSelector((state) => state.post);
 
-const PostDetail = ({ onClick, onLike }) => {
-    const { id } = useParams();
+    //Fetch Reddit posts
+    useEffect(() => {
+        dispatch(fetchSubredditPosts(`r/${subreddit}`));
+    }, [dispatch, subreddit]);
 
-    const post = mockPosts.find(p => p.id === id);
+    if (loading) return <p>Loading posts...</p>;
+    if (error) return <p>Error: {error}</p>;
 
-    if (!post) return <p>Post not found.</p>
+    //Combines local posts and Reddit posts
+    const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
 
     return (
-        <div className='post-detail' onClick={() => onClick?.(post, post.comments)}>
-            <h3>{post.title}</h3>
-            <p>{post.body}</p>
-            <p><small>u/{post.author}</small></p>
-            <p>
-                <small>Likes: {post.likes || 0}</small>
-                <button 
-                    onClick={(e) => {
-                        e.stopPropagation(); //prevents triggering onClick for when you click the button
-                        onLike?.(post.id);
-                    }}
-                    style={{ marginLeft: '10px' }}
+        <div className='post-list'>
+            {sortedPosts.map((post) => (
+                <div 
+                    key={post.id} 
+                    className='post-card' 
+                    onClick={() => dispatch(fetchComments(post.permalink))}
                 >
-                    LIKE
-                </button>
-            </p>
+                    <h3>{post.title}</h3>
+                    {post.body && <p>{post.body}</p>}
+                    <small>
+                        Post by {post.author} | {post.ups} | {post.num_comments}
+                    </small>
 
-            <h3>Comment</h3>
-            {post.comments && post.comments.length > 0 ? (
-                post.comments.map((comment, index) => (
-                    <div key={index} className='comment'>
-                        <p>{comment.body}</p>
-                        <p><small>u/{comment.author}</small></p>
-                        <p><small>{comment.like}</small></p>
-                        <p>
-                            <small>Likes: {comment.likes || 0}</small>
-                            <button 
-                                onClick={(e) => {
-                                e.stopPropagation(); //prevents triggering onClick for when you click the button
-                                onLike?.(comment.id);
-                                }}
-                                style={{ marginLeft: '10px' }}
-                            >
-                                LIKE
-                            </button>
-                        </p>
-                    </div>
-                ))
-            ) : (
-                <p>No comments yet.</p>
-            )}
+                    {/* Comment Display */}
+                    {comments.length > 0 && post.permalink && (
+                        <div className='comments'>
+                            {comments.map((c) => (
+                                <p key={c.id || c.body} className='comment'>
+                                    {c.body || comments.body_html || c.data?.body}
+                                </p>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
         </div>
     );
 };
 
-export default PostDetail;
+export default Post;

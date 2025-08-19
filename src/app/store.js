@@ -4,18 +4,16 @@ import subRedditReducer from '../store/subRedditSlice';
 import postReducer from '../features/post/postSlice';
 import submedditReducer from '../features/submeddits/submedditSlice';
 import userReducer from '../features/user/userSlice';
-import commentReducer from '../features/comment/commentSlice';
 import searchReducer from '../features/search/searchSlice';
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
-        redditReducer,
-        subRedditReducer,
-        postReducer,
-        submedditReducer,
-        userReducer,
-        commentReducer,
-        searchReducer
+        reddit: redditReducer,
+        subReddit: subRedditReducer,
+        post: postReducer,
+        submeddit: submedditReducer,
+        user: userReducer,
+        search: searchReducer,
     },
 });
 

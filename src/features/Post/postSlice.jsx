@@ -1,75 +1,31 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { API_ROOT } from '../../app/reddit';
+import { getSubredditPosts, getPostComments } from '../../app/reddit';
 
-//createPost
-export const createPost = createAsyncThunk('post/createPost', async (postData, thunkAPI) => {
+//fetch posts from a subreddit
+export const fetchSubredditPosts = createAsyncThunk('post/fetchSubredditPosts', async (subreddit, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/post`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(postData),
-        });
-        if (!res.ok) throw new Error('Unable to create post');
-        return await res.json();
+        const posts = await getSubredditPosts(subreddit);
+        return posts;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
 });
 
-//deletePost
-export const deletePost = createAsyncThunk('post/deletePost', async (postId, thunkAPI) => {
+//fetch comments for a specific post
+export const fetchComments = createAsyncThunk('post/fetchComments', async (permalink, thunkAPI) => {
     try {
-        const res = await fetch(`${API_ROOT}/post/${postId}`, {
-            method:'DELETE',
-        });
-        if (!res.ok) throw new Error('Unable to delete post');
-        return postId; //Return the ID so it can be removed from state
-    } catch (error) {
-        return thunkAPI.rejectWithValue(error.message);
-    }
-});
-
-//fetchAllPosts
-export const fetchAllPosts = createAsyncThunk('post/fetchAll', async (_, thunkAPI) => {
-    try {
-        const res = await fetch(`${API_ROOT}/post`);
-        if (!res.ok) throw new Error('Unable to fetch posts');
-        return await res.json();
+        const comments = await getPostComments(permalink);
+        return comments;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
   });
 
-//fetchPost
-export const fetchPost = createAsyncThunk('post/loadPost', async (postId, thunkAPI) => {
-    try {
-        const res = await fetch(`${API_ROOT}/post/${postId}`);
-        if (!res.ok) throw new Error('Post not found')
-        return await res.json();
-    } catch (error) {
-        return thunkAPI.rejectWithValue(error.message);
-    }
-});
-
-//likePost
-export const likePost = createAsyncThunk('post/likePost', async (postId, thunkAPI) => {
-    try {
-        const res = await fetch(`${API_ROOT}/post/${postId}/like`, {
-            method: 'POST',
-        });
-        if (!res.ok) throw new Error('Unable to like post');
-        return await res.json();
-    } catch (error) {
-        return thunkAPI.rejectWithValue(error.message);
-    }
-});
-
-
 const postSlice = createSlice({
     name: 'post',
     initialState: {
         posts: [],
-        searchedPost: null,
+        comments: [],
         loading: false,
         error: null,
         success: false,
@@ -82,7 +38,8 @@ const postSlice = createSlice({
             state.loading = false;
             state.error = null;
             state.success = false;
-            state.searchedPost = null;
+            state.posts = [];
+            state.comments = [];
         },
     },
     extraReducers: builder => {
@@ -97,55 +54,23 @@ const postSlice = createSlice({
         };
 
         builder
-            //createPost
-            .addCase(createPost.pending, setPending)
-            .addCase(createPost.fulfilled, (state, action) => {
-                state.loading = false;
-                state.success = true;
-                state.posts.push(action.payload);
-            })
-            .addCase(createPost.rejected, setRejected)
-
-            //deletePost
-            .addCase(deletePost.pending, setPending)
-            .addCase(deletePost.fulfilled, (state, action) => {
-                state.loading = false;
-                state.success = true;
-                state.posts = state.posts.filter(post => post.id !== action.payload);
-            })
-            .addCase(deletePost.rejected, setRejected)
-
-            //fetchAllPosts
-            .addCase(fetchAllPosts.pending, setPending)
-            .addCase(fetchAllPosts.fulfilled, (state, action) => {
+            //fetchSubredditPosts
+            .addCase(fetchSubredditPosts.pending, setPending)
+            .addCase(fetchSubredditPosts.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
                 state.posts = action.payload;
             })
-            .addCase(fetchAllPosts.rejected, setRejected)
+            .addCase(fetchSubredditPosts.rejected, setRejected)
 
-            //fetchPost
-            .addCase(fetchPost.pending, setPending)
-            .addCase(fetchPost.fulfilled, (state, action) => {
+            //fetchComments
+            .addCase(fetchComments.pending, setPending)
+            .addCase(fetchComments.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
                 state.searchedPost = action.payload;
             })
-            .addCase(fetchPost.rejected, setRejected)
-
-            //likePost
-            .addCase(likePost.pending, setPending)
-            .addCase(likePost.fulfilled, (state, action) => {
-                state.loading = false;
-                state.success = true;
-                //Code below updates the liked post
-                const updated = action.payload;
-                state.posts = state.posts.map(post => post.id === updated.id ? updated : post);
-                if (state.searchedPost?.id === updated.id) {
-                    state.searchedPost = updated;
-                }
-            })
-            .addCase(likePost.rejected, setRejected);
+            .addCase(fetchComments.rejected, setRejected)
     },
 });
 

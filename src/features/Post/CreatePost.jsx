@@ -1,7 +1,6 @@
-//Form for submitting new posts
-//Maybe add options to select submeddit for your post
+//Form for submitting new posts (local only)
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addLocalPost } from './postSlice';
 import './CreatePost.css';
 
@@ -23,6 +22,9 @@ const CreatePost = ({ onClose }) => {
             title,
             body,
             author: 'Anonymous',
+            ups: 0,
+            num_comments: 0,
+            permalink: `/local/${Date.now()}`,
         };
 
         dispatch(addLocalPost(newPost));
