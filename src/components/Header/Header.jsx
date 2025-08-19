@@ -25,25 +25,8 @@ const Header = () => {
         }
     };
 
-    /*const clientId = 'EJ0qQsv53I1NBynzswhTAw';
-    const redirectUri = 'http://localhost:3000/authorize_callback';
-    const scope = 'read identity';*/
-
-    /*const loginWithReddit = () => {
-        const url = `https://www.reddit.com/api/v1/authorize?client_id=${clientId}&response_type=code&state=random_string&redirect_uri=${redirectUri}&duration=temporary&scope=${scope}`;
-        window.location.href = url;
-    };*/
-
-    const loginWithReddit = () => {
-        window.location.href = 'http://localhost:5000/auth/reddit';
-    };
-
     return (
         <div className='header'>
-            <button className='login' onClick={loginWithReddit}>
-                <span className='btn-text'>Login</span>
-            </button>
-
             <button className='create-post-btn' onClick={toggleCreatePost}>
                 ➕ <span className='btn-text'>Create</span>
             </button>
