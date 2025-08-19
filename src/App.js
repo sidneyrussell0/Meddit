@@ -21,22 +21,22 @@ import User from './features/user/User';
 
 function App() {
     return(
-            <Router>
-                <Routes>
-                        <Route path ="/" element={<Layout />}>
-                            <Route index element={<Home />} />
-                            <Route path="about" element={<About />} />
-                            <Route path="help" element={<Help />} />
-                            <Route path="settings" element={<Settings />} />
-                            <Route path='posts/:id' element={<Post />} />
-                            <Route path="m/:submeddit" element={<Submeddits />} />
-                            <Route path="u/:username" element={<User />} />
-                        </Route>
+        <Router>
+            <Routes>
+                    <Route path ="/" element={<Layout />}>
+                        <Route index element={<Home />} />
+                        <Route path="about" element={<About />} />
+                        <Route path="help" element={<Help />} />
+                        <Route path="settings" element={<Settings />} />
+                        <Route path='/r/:subreddit' element={<Post />} />
+                        <Route path="/discussion/:subreddit/:id" element={<Submeddits />} />
+                        <Route path="u/:username" element={<User />} />
+                    </Route>
 
-                    {/* 404 */}
-                    <Route path="*" element={<div>404 Not Found</div>} />
-                </Routes>
-            </Router>
+                {/* 404 */}
+                <Route path="*" element={<div>404 Not Found</div>} />
+            </Routes>
+        </Router>
     );
 }
 
