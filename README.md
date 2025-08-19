@@ -1,4 +1,5 @@
 # Meddit Portfolio Project
+# ⚠️ UNDER CONSTRUCTION ⚠️
 
 ## Project Overview
 This is a react-based web application that allows users to browse and search *Meddit* posts. This project demonstrates the use of modern React features, including hooks, state management with Redux, routing with React Router, and API integration.
@@ -6,7 +7,7 @@ This is a react-based web application that allows users to browse and search *Me
 ## Wireframe
 Image of the figma wireframe and logo below:
 ![WireFrame](./public/Images/MedditWireframe.png)
-![Logo](./public/logo200t.svg)
+![Logo](./public/logo500.png)
 
 ## Features
 ### General Features
@@ -14,29 +15,6 @@ Image of the figma wireframe and logo below:
 - Search for posts by keywords.
 - Responsive design for mobile and desktop.
 - Easy-to-use interface.
-
-### Header Component
- - Displayes the application logo and title.
- - Includes a search form for searching *Meddit* posts.
- - Provides a menu botton to toggle the visibility of the subreddit navigation.
-
-### Auth Component
-- Something 
-
-### Comments Component
-- Anything
-
-### Posts Component
-- Anything
-
-### Subreddits Component
-- Displays a list of subreddits.
-- Allows users to select a subreddit, fetch its posts, and navigate to the home page.
-- Highlights the currectly active subreddit.
-- Clears the search term when a new subreddit is selected.
-
-### Users Component
-- ABC
 
 ### State Management
 - Fetches posts from a specified subreddit using the Reddit API.
@@ -55,7 +33,7 @@ Image of the figma wireframe and logo below:
 - Reddit API
 
 ## Getting Started
-The instructions below will demonstrate how to set up the project locally.
+The instructions below will demonstrate how to set up the project locally:
 
 ### Installation
 - In your terminal, run:
@@ -73,10 +51,4 @@ The instructions below will demonstrate how to set up the project locally.
 3. Log in, use the search bar to find specific posts or browse the default feed.
 
 ## License
-This is where you tell other developers what they can and cannot do with your project.
-
-## Troubleshooting Tips
-This is **bold text**.
-This is *italic*.
-This is ***really important text***.
-> This is a blockquote.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
