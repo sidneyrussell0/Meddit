@@ -5,8 +5,8 @@ This is a react-based web application that allows users to browse and search *Me
 
 ## Wireframe
 Image of the figma wireframe and logo below:
-![WireFrame] (./public/Images/MedditWireframe.png)
-![Logo] (./public/logo200t.svg)
+![WireFrame](./public/Images/MedditWireframe.png)
+![Logo](./public/logo200t.svg)
 
 ## Features
 ### General Features
