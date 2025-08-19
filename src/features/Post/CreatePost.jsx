@@ -2,13 +2,11 @@
 //Maybe add options to select submeddit for your post
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost } from './postSlice';
+import { addLocalPost } from './postSlice';
 import './CreatePost.css';
 
 const CreatePost = ({ onClose }) => {
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.auth);
-    const { searchedSubmeddit } = useSelector(state => state.submeddit || {});
 
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
@@ -21,13 +19,13 @@ const CreatePost = ({ onClose }) => {
         }
 
         const newPost = {
+            id: Date.now(),
             title,
             body,
-            author: user?.email || 'Anonymous',
-            submedditId: searchedSubmeddit?.id,
+            author: 'Anonymous',
         };
 
-        dispatch(createPost(newPost));
+        dispatch(addLocalPost(newPost));
         setTitle('');
         setBody('');
 

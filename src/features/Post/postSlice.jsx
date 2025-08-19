@@ -75,6 +75,9 @@ const postSlice = createSlice({
         success: false,
     },
     reducers: {
+        addLocalPost: (state, action) => {
+            state.posts.push(action.payload);
+        },
         resetPostState: (state) => {
             state.loading = false;
             state.error = null;
@@ -146,6 +149,6 @@ const postSlice = createSlice({
     },
 });
 
-export const { resetPostState } = postSlice.actions;
+export const { resetPostState, addLocalPost } = postSlice.actions;
 
 export default postSlice.reducer;
