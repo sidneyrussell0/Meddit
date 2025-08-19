@@ -4,8 +4,9 @@
 This is a react-based web application that allows users to browse and search *Meddit* posts. This project demonstrates the use of modern React features, including hooks, state management with Redux, routing with React Router, and API integration.
 
 ## Wireframe
-Image of the figma wireframe below
-![WireFrame] (public/MedditWireframe.png)
+Image of the figma wireframe and logo below:
+![WireFrame] (./public/Images/MedditWireframe.png)
+![Logo] (./public/logo200t.svg)
 
 ## Features
 ### General Features
