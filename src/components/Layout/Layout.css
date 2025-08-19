@@ -35,8 +35,8 @@ main {
     justify-content: flex-start;
     align-items: center;        
     min-height: 100vh;                 
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: black;
     text-align: center;
   }
 
@@ -76,8 +76,8 @@ footer {
     .header {
         display: grid;
         grid-template-areas: 
-        'logo search create login';
-        grid-template-rows: auto auto auto auto;
+        'logo search create';
+        grid-template-rows: auto auto auto;
         align-items: center;
         gap: 0.55rem;
         padding: 0.5rem;
