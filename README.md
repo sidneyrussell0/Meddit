@@ -5,7 +5,7 @@ This is a react-based web application that allows users to browse and search *Me
 
 ## Wireframe
 Image of the figma wireframe below
-![Wireframe] (/public/MedditWireFrame.png)
+![WireFrame] (public/MedditWireframe.png)
 
 ## Features
 ### General Features
@@ -69,7 +69,7 @@ The instructions below will demonstrate how to set up the project locally.
 ### Usage
 1. Start the development server using `npm start`.
 2. Open http:/localhost:3000 in your browser.
-3. Create an account, log in, use the search bar to find specific posts or browse the default feed.
+3. Log in, use the search bar to find specific posts or browse the default feed.
 
 ## License
 This is where you tell other developers what they can and cannot do with your project.
