@@ -1,0 +1,56 @@
+.create-post {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: black;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+.create-post h3 {
+    text-decoration: dashed;
+    align-items: center;
+    text-align: center;
+}
+
+.create-post input {
+    display: flex;
+    width: 20rem;
+    margin-bottom: 0.5rem;
+}
+
+.create-post textarea {
+    display: flex;
+    width: 25rem;
+    height: 5rem;
+    margin-bottom: 0.5rem;
+}
+
+.create-post button {
+    display: flex;
+    margin-left: 21rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .create-post {
+        height: auto;
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
