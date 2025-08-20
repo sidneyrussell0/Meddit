@@ -24,7 +24,11 @@ function SearchResults() {
         <div className='search-results'>
             <h2>Search results for "{query}"</h2>
             {results.map((post) => (
-                <Post key={post.id} post={post} />
+                <div key={post.id} className="post-card">
+                <h3>{post.title}</h3>
+                <p>{post.selftext}</p>
+                <small>Posted by {post.author}</small>
+              </div>
             ))}
         </div>
     );

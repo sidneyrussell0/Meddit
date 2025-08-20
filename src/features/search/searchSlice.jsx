@@ -5,7 +5,7 @@ import { searchReddit } from '../../app/reddit';
 export const fetchSearchResults = createAsyncThunk('search/fetchSearchResults', async (query, { rejectWithValue }) => {
     try {
         const res = await searchReddit(query);
-        return results;
+        return res;
     } catch (error) {
         return rejectWithValue(error.message);
     }
@@ -31,17 +31,17 @@ const searchSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(searchPosts.pending, (state, action) => {
+            .addCase(fetchSearchResults.pending, (state, action) => {
                 state.loading = true;
                 state.error = null;
                 state.success = false;
             })
-            .addCase(searchPosts.fulfilled, (state, action) => {
+            .addCase(fetchSearchResults.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
                 state.results = action.payload;
             })
-            .addCase(searchPosts.rejected, (state, action) => {
+            .addCase(fetchSearchResults.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || 'Failed to fetch search results';
             });

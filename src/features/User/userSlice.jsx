@@ -42,13 +42,13 @@ const userSlice = createSlice({
 
         builder
             //fetchProfile
-            .addCase(fetchProfile.pending, setPending)
-            .addCase(fetchProfile.fulfilled, (state, action) => {
+            .addCase(fetchUserPosts.pending, setPending)
+            .addCase(fetchUserPosts.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
                 state.currentUser = action.payload;
             })
-            .addCase(fetchProfile.rejected, setRejected)
+            .addCase(fetchUserPosts.rejected, setRejected)
     },
 });
 
