@@ -1,33 +1,32 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { API_ROOT } from '../../app/reddit';
+import { searchReddit } from '../../app/reddit';
 
-//search
-export const searchPosts = createAsyncThunk('search/fetchResults', async (searchTerm, thunkAPI) => {
+//Thunk for searching Reddit
+export const fetchSearchResults = createAsyncThunk('search/fetchSearchResults', async (query, { rejectWithValue }) => {
     try {
-        const res = await fetch(`${API_ROOT}/search/${encodeURIComponent(searchTerm)}`);
-        if (!res.ok) throw new Error('Unable to search post');
-        return await res.json();
+        const res = await searchReddit(query);
+        return results;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message);
+        return rejectWithValue(error.message);
     }
 });
 
 const searchSlice = createSlice({
     name: 'search',
     initialState: {
+        query: '',
         results: [],
         loading: false,
         error: null,
         success: false,
-        searchTerm: '',
     },
     reducers: {
+        setQuery: (state, action) => {
+            state.query = action.payload;
+        },
         resetSearchState: (state) => {
-            state.loading = false;
-            state.error = null;
-            state.success = false;
-            state.searchTerm = '';
             state.results = [];
+            state.query = '';
         },
     },
     extraReducers: (builder) => {
@@ -36,7 +35,6 @@ const searchSlice = createSlice({
                 state.loading = true;
                 state.error = null;
                 state.success = false;
-                state.searchTerm = action.meta.arg;
             })
             .addCase(searchPosts.fulfilled, (state, action) => {
                 state.loading = false;
@@ -45,12 +43,12 @@ const searchSlice = createSlice({
             })
             .addCase(searchPosts.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.error = action.payload || 'Failed to fetch search results';
             });
     },
 });
 
 
-export const { resetSearchState } = searchSlice.actions;
+export const { setQuery, resetSearchState } = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -1,69 +1,31 @@
-//Results from search
+//Shows results from search
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchSearchResults } from './searchSlice';
 
 
 function SearchResults() {
-    const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
+    const { query } = useParams();
+    const dispatch = useDispatch();
+    const { results, loading, error } = useSelector((state) => state.search);
 
-    const location = useLocation();
-
-    // Get ?q= value from URL
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const q = params.get('q') || '';
-        setQuery(q);
-    }, [location.search]);
+        if (query) {
+            dispatch(fetchSearchResults(query));
+        }
+    }, [query, dispatch]);
 
-    // Fetch results when query changes
-    useEffect(() => {
-        if (!query) return;
-
-        const fetchResults = async () => {
-            const token = localStorage.getItem('reddit_token');
-            if (!token) {
-                alert('No token found, please log in.');
-                return;
-            }
-
-            setLoading(true);
-            try {
-                const res = await axios.get(`http://localhost:5000/search?q=${query}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setResults(res.data.data.children);
-            } catch (err) {
-                console.error(err);
-                alert('Search failed');
-            }
-        };
-
-        fetchResults();
-    }, [query]);
+    if (loading) return <p>Loading results...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!results.length) return <p>No results found for "{query}"</p>;
 
     return (
-        <div>
-            <h2>Search Results for "{query}"</h2>
-
-
-            {!loading && results.length === 0 && query && (
-                <p>No results found for '{query}'</p>
-            )}
-
-            <ul>
-                {results.map(post => (
-                    <li key={post.data.id}>
-                        <Link to={`/posts/${post.data.id}`}>
-                            {post.data.title}
-                        </Link>
-                        <span> - {post.data.subreddit} by {post.data.author}</span>
-                    </li>
-                ))}
-            </ul>
+        <div className='search-results'>
+            <h2>Search results for "{query}"</h2>
+            {results.map((post) => (
+                <Post key={post.id} post={post} />
+            ))}
         </div>
     );
 }

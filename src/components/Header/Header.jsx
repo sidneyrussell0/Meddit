@@ -1,28 +1,28 @@
 //Site header with logo, login, and searchbar
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setQuery, fetchSearchResults } from '../../features/search/searchSlice';
 import CreatePost from '../../features/post/CreatePost';
 import './Header.css';
 
 const Header = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [input, setInput] = useState('');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!input.trim()) return;
+
+        dispatch(setQuery(input));
+        dispatch(fetchSearchResults(input));
+        navigate(`/search/${input}`);
+    };
 
     const [showCreatePost, setShowCreatePost] = useState(false);
     const toggleCreatePost = () => {
         setShowCreatePost(!showCreatePost);
-    };
-
-    const handleInputChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        if (searchTerm.trim()) {
-            navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-            setSearchTerm('');
-        }
     };
 
     return (
@@ -43,13 +43,13 @@ const Header = () => {
                 <img src='/logo200.svg' alt='Meddit' className='logo-small' />
             </div>
 
-            <form className='search-container' onSubmit={handleSearchSubmit}>
+            <form className='search-container' onSubmit={handleSubmit}>
                 <input
                     className='search-input'
                     type='text'
-                    value={searchTerm}
-                    onChange={handleInputChange}
-                    placeholder='Search...'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder='Search Reddit...'
                 />
                 <button className='search-btn'type='submit'>🔍</button>
             </form>
