@@ -13,7 +13,7 @@ const Post = () => {
 
     //Fetch Reddit posts
     useEffect(() => {
-        const targetSubreddit = subreddit ? `r/${subreddit}` : `/r/SMW/`;
+        const targetSubreddit = subreddit ? `r/${subreddit}` : 'SMW';
         dispatch(fetchSubredditPosts(targetSubreddit));
     }, [dispatch, subreddit]);
 
@@ -38,7 +38,7 @@ const Post = () => {
                     <h3>{post.title}</h3>
                     {post.body && <p>{post.body}</p>}
                     <small>
-                        Post by {post.author} | {post.ups} | {post.num_comments}
+                        Post by {post.author} | {post.ups} 👍 | {post.num_comments} Comments
                     </small>
                 </div>
             ))}

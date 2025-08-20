@@ -7,7 +7,7 @@ import './Post.css';
 
 const PostThread = () => {
     const dispatch = useDispatch();
-    const { subreddit, id } = useParams();
+    const { subreddit, postId } = useParams();
     const { comments, loading, error } = useSelector((state) => state.post);
     const location = useLocation();
     const post = location.state; //post passed from Post.jsx
@@ -25,9 +25,9 @@ const PostThread = () => {
     return (
         <div className='post-thread'>
             <h2>{post.title}</h2>
-            {post.selftext && <p>{post.selftext}</p>}
+            {post.body && <p>{post.body}</p>}
             <small>
-                Post by {post.author} in r/{subreddit} | {post.ups} | {post.num_comments}
+                Post by {post.author} in r/{subreddit} | {post.ups} 👍 | {post.num_comments} Comments
             </small>
 
             <h3>Comments</h3>
