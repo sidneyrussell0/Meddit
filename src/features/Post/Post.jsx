@@ -1,18 +1,21 @@
-//Shows full post content plus comments
+//Shows full post content
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSubredditPosts, fetchComments } from './postSlice';
-import { useParams } from 'react-router-dom';
+import { fetchSubredditPosts } from './postSlice';
+import { useParams, useNavigate } from 'react-router-dom';
 import './Post.css';
 
 const Post = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { subreddit } = useParams();
-    const { posts, comments, loading, error } = useSelector((state) => state.post);
+    const { posts, loading, error } = useSelector((state) => state.post);
 
     //Fetch Reddit posts
     useEffect(() => {
-        dispatch(fetchSubredditPosts(`r/${subreddit}`));
+        if (subreddit) {
+            dispatch(fetchSubredditPosts(`r/${subreddit}`));
+        }
     }, [dispatch, subreddit]);
 
     if (loading) return <p>Loading posts...</p>;
@@ -23,28 +26,18 @@ const Post = () => {
 
     return (
         <div className='post-list'>
+            <h2>Posts from r/{subreddit}</h2>
             {sortedPosts.map((post) => (
                 <div 
                     key={post.id} 
                     className='post-card' 
-                    onClick={() => dispatch(fetchComments(post.permalink))}
+                    onClick={() => navigate(`/discussion/${subreddit}/${post.id}`, { state: post })}
                 >
                     <h3>{post.title}</h3>
-                    {post.body && <p>{post.body}</p>}
+                    {post.selftext && <p>{post.selftext}</p>}
                     <small>
                         Post by {post.author} | {post.ups} | {post.num_comments}
                     </small>
-
-                    {/* Comment Display */}
-                    {comments.length > 0 && post.permalink && (
-                        <div className='comments'>
-                            {comments.map((c) => (
-                                <p key={c.id || c.body} className='comment'>
-                                    {c.body || comments.body_html || c.data?.body}
-                                </p>
-                            ))}
-                        </div>
-                    )}
                 </div>
             ))}
         </div>
