@@ -13,9 +13,8 @@ const Post = () => {
 
     //Fetch Reddit posts
     useEffect(() => {
-        if (subreddit) {
-            dispatch(fetchSubredditPosts(`r/${subreddit}`));
-        }
+        const targetSubreddit = subreddit ? `r/${subreddit}` : `/r/SMW/`;
+        dispatch(fetchSubredditPosts(targetSubreddit));
     }, [dispatch, subreddit]);
 
     if (loading) return <p>Loading posts...</p>;
@@ -26,15 +25,18 @@ const Post = () => {
 
     return (
         <div className='post-list'>
-            <h2>Posts from r/{subreddit}</h2>
+            <h2>{subreddit? `r/${subreddit}` : `/r/SMW/`}</h2>
+
+            {sortedPosts.length === 0 && <p>No posts available.</p>}
+
             {sortedPosts.map((post) => (
                 <div 
                     key={post.id} 
                     className='post-card' 
-                    onClick={() => navigate(`/discussion/${subreddit}/${post.id}`, { state: post })}
+                    onClick={() => navigate(`/discussion/${subreddit || 'SMW'}/${post.id}`, { state: post })}
                 >
                     <h3>{post.title}</h3>
-                    {post.selftext && <p>{post.selftext}</p>}
+                    {post.body && <p>{post.body}</p>}
                     <small>
                         Post by {post.author} | {post.ups} | {post.num_comments}
                     </small>
