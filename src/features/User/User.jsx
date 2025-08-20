@@ -1,55 +1,40 @@
-import React, { useEffect, useState } from 'react';
+//WORKING ON USER TO VIEW REDDIT USERNAMES AND THEIR POSTS
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProfile, loadUserByEmail, resetUserState, followUser } from './userSlice';
+import { fetchUserPosts, resetUserState } from './userSlice';
+import { useParams } from 'react-router-dom';
+import './User.css';
 
 
-const ProfileComponent = () => {
+const User = () => {
     const dispatch = useDispatch();
-    const [email, setEmail] = useState('');
-    const { currentUser, searchedUser, loading, error, success } = useSelector(state => state.user);
+    const { username } = useParams();
+    const { posts, loading, error } = useSelector(state => state.user);
 
     useEffect(() => {
-        dispatch(fetchProfile());
-
-        if (success || error) {
-            const timer = setTimeout(() => {
-                dispatch(resetUserState());
-            }, 3000); //3 Seconds later
-
-            return () => clearTimeout(timer);
+        if (username) {
+            dispatch(fetchUserPosts(username));
         }
-    }, [success, error, dispatch]);
+        return () => dispatch(resetUserState());
+    }, [dispatch, username]);
 
-    const handleSearch = () => {
-        dispatch(loadUserByEmail(email));
-    };
+    if (loading) return <p>Loading user posts...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!posts.length) return <p>No posts found for {username}</p>;
 
-    const handleFollow = (email) => {
-        dispatch(followUser(email));
-    };
 
     return (
-        <div>
-            {loading && <p>Loading...</p>}
-            {error && <p>Error: {error}</p>}
-            {currentUser && <p>Welcome, {currentUser.name}</p>}
-
-            {/* Searched User */}
-            {searchedUser && (
-                <div>
-                    <p>{searchedUser.name} - Followers: {searchedUser.follows || 0}</p>
-                    <button onClick={() => handleFollow(searchedUser.email)}>Follow</button>
+        <div className='user-posts'>
+            <h2>Posts by {username}</h2>
+            {posts.map(post => (
+                <div key={post.id} className='post-card'>
+                    <h3>{post.title}</h3>
+                    {post.selftext && <p>{post.selftext}</p>}
+                    <small>{post.ups} | {post.num_comments}</small>
                 </div>
-            )}
-            <input 
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder='Search by email'
-            />
-            <button onClick={handleSearch}>Search</button>
+            ))}
         </div>
     );
 };
    
-export default ProfileComponent;
+export default User;

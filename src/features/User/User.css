@@ -1,0 +1,47 @@
+.user-posts {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.user-posts h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.post-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.post-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #0079d3; 
+    cursor: pointer;
+}
+
+.post-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+    color: #444;
+}
+
+.post-card small {
+    font-size: 0.8rem;
+    color: #777;
+}
