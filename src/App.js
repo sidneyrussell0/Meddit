@@ -14,7 +14,7 @@ import Settings from './features/settings/Settings';
 
 //Features
 import Post from './features/post/Post';
-/*import SearchResults from '../features/search/SearchResults';*/
+import SearchResults from './features/search/SearchResults';
 import Submeddits from './features/submeddits/Submeddits';
 import User from './features/user/User';
 
@@ -25,6 +25,7 @@ function App() {
             <Routes>
                     <Route path ="/" element={<Layout />}>
                         <Route index element={<Home />} />
+                        <Route path="/search/:query" element={<SearchResults />} />
                         <Route path="about" element={<About />} />
                         <Route path="help" element={<Help />} />
                         <Route path="settings" element={<Settings />} />
