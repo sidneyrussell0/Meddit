@@ -1,0 +1,47 @@
+//Shows single post & comments
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useLocation } from 'react-router-dom';
+import { fetchComments } from './postSlice';
+import './Post.css';
+
+const PostThread = () => {
+    const dispatch = useDispatch();
+    const { subreddit, id } = useParams();
+    const { comments, loading, error } = useSelector((state) => state.post);
+    const location = useLocation();
+    const post = location.state; //post passed from Post.jsx
+
+    useEffect(() => {
+        if (post?.permalink) {
+            dispatch(fetchComments(post.permalink));
+        }
+    }, [dispatch, post]);
+
+    if (!post) return <p>Post not found.</p>;
+    if (loading) return <p>Loading comments...</p>;
+    if (error) return <p>Error: {error}</p>;
+
+    return (
+        <div className='post-thread'>
+            <h2>{post.title}</h2>
+            {post.selftext && <p>{post.selftext}</p>}
+            <small>
+                Post by {post.author} in r/{subreddit} | {post.ups} | {post.num_comments}
+            </small>
+
+            <h3>Comments</h3>
+            {comments.length > 0? (
+                comments.map((c) => (
+                    <div key={c.id} className='comment'>
+                        <p><strong>{c.author}</strong>: {c.body}</p>
+                    </div>
+                ))
+            ) : (
+                <p>No comments yet.</p>
+            )}
+        </div>
+    );
+};
+
+export default PostThread;

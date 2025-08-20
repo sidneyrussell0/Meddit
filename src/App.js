@@ -17,6 +17,7 @@ import Post from './features/post/Post';
 import SearchResults from './features/search/SearchResults';
 import Submeddits from './features/submeddits/Submeddits';
 import User from './features/user/User';
+import PostThread from './features/post/PostThread';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                         <Route path="help" element={<Help />} />
                         <Route path="settings" element={<Settings />} />
                         <Route path='/r/:subreddit' element={<Post />} />
+                        <Route path="/discussion/:subreddit/:id" element={<PostThread />} />
                         <Route path="/discussion/:subreddit/:id" element={<Submeddits />} />
                         <Route path="u/:username" element={<User />} />
                     </Route>
