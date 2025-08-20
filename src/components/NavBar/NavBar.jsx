@@ -27,12 +27,12 @@ const NavBar = () => {
                     <div className='topics'>
                         <h2>Topics</h2>
                         <ul>
-                            <li><Link to='/games'>Games</Link></li>
-                            <li><Link to='/q-and-as'>Q&As</Link></li>
-                            <li><Link to='/art-anime'>Art & Anime</Link></li>
-                            <li><Link to='/food-drink'>Food & Drink</Link></li>
-                            <li><Link to='/music'>Music</Link></li>
-                            <li><Link to='/news'>News</Link></li>
+                            <li><Link to='/r/SMW/'>Super Mario World</Link></li>
+                            <li><Link to='/r/MarioKartWorld/'>Mario Kart</Link></li>
+                            <li><Link to='/r/MARIOPARTY/'>Mario Party</Link></li>
+                            <li><Link to='/r/marioandluigi/'>Mario & Luigi</Link></li>
+                            <li><Link to='/r/WorldOfNintendo/'>Nintendo</Link></li>
+                            <li><Link to='/r/MarioCartoons/'>Cartoons</Link></li>
                         </ul>
                     </div>
 
