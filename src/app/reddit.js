@@ -1,6 +1,6 @@
 //Reddit API
-export const API_ROOT = 'https://www.reddit.com';
 const PROXY = 'https://cors-anywhere.herokuapp.com/';
+const API_ROOT = 'https://www.reddit.com';
 
 //Fetch posts from a subreddit
 export const getSubredditPosts = async (subreddit) => {

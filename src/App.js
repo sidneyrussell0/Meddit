@@ -14,11 +14,10 @@ import Settings from './features/settings/Settings';
 
 //Features
 import Post from './features/post/Post';
+import PostThread from './features/post/PostThread';
 import SearchResults from './features/search/SearchResults';
 import Submeddits from './features/submeddits/Submeddits';
 import User from './features/user/User';
-import PostThread from './features/post/PostThread';
-
 
 function App() {
     return(
@@ -26,13 +25,19 @@ function App() {
             <Routes>
                     <Route path ="/" element={<Layout />}>
                         <Route index element={<Home />} />
+
                         <Route path="/search/:query" element={<SearchResults />} />
+
                         <Route path="about" element={<About />} />
                         <Route path="help" element={<Help />} />
                         <Route path="settings" element={<Settings />} />
+
                         <Route path='/r/:subreddit' element={<Post />} />
-                        <Route path="/discussion/:subreddit/:id" element={<PostThread />} />
-                        <Route path="/discussion/:subreddit/:id" element={<Submeddits />} />
+
+                        <Route path="/discussion/:subreddit/:postId" element={<PostThread />} />
+
+                        <Route path="/submeddits" element={<Submeddits />} />
+                        
                         <Route path="u/:username" element={<User />} />
                     </Route>
 
