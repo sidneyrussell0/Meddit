@@ -24,7 +24,26 @@ export const fetchComments = createAsyncThunk('post/fetchComments', async (perma
 const postSlice = createSlice({
     name: 'post',
     initialState: {
-        posts: [],
+        posts: [
+            //Local fake posts, delete when using API
+            {
+                id: 1,
+                title: "My first local post",
+                body: "This is just a test post saved locally",
+                author: "Sidney R",
+                ups: 12,
+                num_comments: 3,
+            },
+            {
+                id: 2,
+                title: "Second local post",
+                body: "Another example post to see on the webpage",
+                author: "Jared H",
+                ups: 45,
+                num_comments: 10,
+            },
+            //
+        ],
         comments: [],
         loading: false,
         error: null,
@@ -43,34 +62,38 @@ const postSlice = createSlice({
         },
     },
     extraReducers: builder => {
-        const setPending = (state) => {
-            state.loading = true;
-            state.error = null;
-            state.success = false;
-        };
-        const setRejected = (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-        };
-
         builder
             //fetchSubredditPosts
-            .addCase(fetchSubredditPosts.pending, setPending)
+            .addCase(fetchSubredditPosts.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = false;
+            })
             .addCase(fetchSubredditPosts.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
                 state.posts = action.payload;
             })
-            .addCase(fetchSubredditPosts.rejected, setRejected)
+            .addCase(fetchSubredditPosts.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
 
             //fetchComments
-            .addCase(fetchComments.pending, setPending)
+            .addCase(fetchComments.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = false;
+            })
             .addCase(fetchComments.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
                 state.searchedPost = action.payload;
             })
-            .addCase(fetchComments.rejected, setRejected)
+            .addCase(fetchComments.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
     },
 });
 
