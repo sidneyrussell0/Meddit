@@ -1,11 +1,10 @@
-/*WORKING ON */
 .layout {
     display: grid;
     grid-template-areas: 
         'header header header header'
         'nav main main sidebar'
         'footer footer footer footer';
-    grid-template-columns: 250px 4fr 4fr 250px;
+    grid-template-columns: 1fr 675px 1fr 1fr;
     grid-template-rows: auto 1fr auto;
     min-height: 100vh;
     gap: 1rem;
@@ -42,6 +41,7 @@ main {
 
 aside {
     grid-area: sidebar;
+    margin: 0 auto;
 }
 
 footer {
