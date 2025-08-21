@@ -15,13 +15,12 @@ const Post = ({ subreddit: propSubreddit }) => {
     const activeSubreddit = propSubreddit || paramSubreddit || 'SMW';
 
     //Fetch Reddit posts
-    //
-    useEffect(() => {
+    /*useEffect(() => {
         dispatch(fetchSubredditPosts(activeSubreddit));
     }, [dispatch, activeSubreddit]);
 
     if (loading) return <p>Loading posts...</p>;
-    if (error) return <p>Error: {error}</p>;
+    if (error) return <p>Error: {error}</p>;*/
 
     //Combines local posts and Reddit posts
     const sortedPosts = [...posts].sort((a, b) => b.created_utc - a.created_utc);
@@ -38,6 +37,13 @@ const Post = ({ subreddit: propSubreddit }) => {
                 >
                     <h3>{post.title}</h3>
                     {post.body && <p>{post.body}</p>}
+                    {post.image && (
+                        <img 
+                            src={post.image}
+                            alt={post.title}
+                            className='post-image'
+                        />
+                    )}
                     <small>
                         Post by {post.author} | {post.ups} 👍 | {post.num_comments} Comments
                     </small>
