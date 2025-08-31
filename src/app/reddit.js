@@ -1,11 +1,10 @@
-//Reddit API
-const PROXY = 'https://cors-anywhere.herokuapp.com/';
+//Reddit JSON API (frontend only)
 const API_ROOT = 'https://www.reddit.com';
 
 //Fetch posts from a subreddit
 export const getSubredditPosts = async (subreddit) => {
   try {
-    const response = await fetch(`${PROXY}${API_ROOT}/r/${subreddit}.json`);
+    const response = await fetch(`${API_ROOT}/r/${subreddit}.json`);
     const json = await response.json();
     return json.data.children.map((post) => post.data);
   } catch (err) {
@@ -17,7 +16,7 @@ export const getSubredditPosts = async (subreddit) => {
 //Fetch a list of subreddits
 export const getSubreddits = async () => {
   try {
-    const response = await fetch(`${PROXY}${API_ROOT}/subreddits.json`);
+    const response = await fetch(`${API_ROOT}/subreddits.json`);
     const json = await response.json();
     return json.data.children.map((subreddit) => subreddit.data);
   } catch (err) {
@@ -30,7 +29,7 @@ export const getSubreddits = async () => {
 export const getPostComments = async (permalink) => {
   try {
     //permalink must start with '/r/subreddit/comments/...'
-    const response = await fetch(`${PROXY}${API_ROOT}${permalink}.json`);
+    const response = await fetch(`${API_ROOT}${permalink}.json`);
     const json = await response.json();
     return json[1].data.children.map((c) => c.data);
   } catch (err) {
@@ -43,7 +42,7 @@ export const getPostComments = async (permalink) => {
 export const searchReddit = async (query) => {
   try {
     const response = await fetch(
-      `${PROXY}${API_ROOT}/search.json?q=${encodeURIComponent(query)}&limit=20&raw_json=1`
+      `${API_ROOT}/search.json?q=${encodeURIComponent(query)}&limit=20&raw_json=1`
     );
     const json = await response.json();
     return json.data.children.map((post) => post.data);
