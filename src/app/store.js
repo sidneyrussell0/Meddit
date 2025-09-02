@@ -1,17 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import redditReducer from '../store/redditSlice';
-import subRedditReducer from '../store/subRedditSlice';
 import postReducer from '../features/post/postSlice';
 import submedditReducer from '../features/submeddits/submedditSlice';
+import subRedditReducer from '../store/subRedditSlice';
 import userReducer from '../features/user/userSlice';
 import searchReducer from '../features/search/searchSlice';
 
 const store = configureStore({
     reducer: {
-        reddit: redditReducer,
-        subReddit: subRedditReducer,
         post: postReducer,
-        submeddit: submedditReducer,
+        subReddit: subRedditReducer, //API
+        localSubmeddits: submedditReducer, //Local test
         user: userReducer,
         search: searchReducer,
     },
