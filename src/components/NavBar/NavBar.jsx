@@ -20,7 +20,7 @@ const NavBar = () => {
                     <div className='home'>
                         <ul>
                             <li><Link to='/'>Home</Link></li>
-                            <li><Link to='submeddit'>Popular</Link></li>
+                            <li><Link to='/submeddits'>Popular</Link></li>
                         </ul>
                     </div>
                     
