@@ -20,19 +20,19 @@ const NavBar = () => {
                     <div className='home'>
                         <ul>
                             <li><Link to='/'>Home</Link></li>
-                            <li><Link to='/submeddits'>Submeddits</Link></li>
+                            <li><Link to='submeddit'>Popular</Link></li>
                         </ul>
                     </div>
                     
                     <div className='topics'>
                         <h2>Topics</h2>
                         <ul>
-                            <li><Link to='/r/SMW/'>Super Mario World</Link></li>
-                            <li><Link to='/r/MarioKartWorld/'>Mario Kart</Link></li>
-                            <li><Link to='/r/MARIOPARTY/'>Mario Party</Link></li>
-                            <li><Link to='/r/marioandluigi/'>Mario & Luigi</Link></li>
-                            <li><Link to='/r/WorldOfNintendo/'>Nintendo</Link></li>
-                            <li><Link to='/r/MarioCartoons/'>Cartoons</Link></li>
+                            <li><Link to='/r/SMW'>Super Mario World</Link></li>
+                            <li><Link to='/r/MarioKartWorld'>Mario Kart</Link></li>
+                            <li><Link to='/r/MARIOPARTY'>Mario Party</Link></li>
+                            <li><Link to='/r/marioandluigi'>Mario & Luigi</Link></li>
+                            <li><Link to='/r/WorldOfNintendo'>Nintendo</Link></li>
+                            <li><Link to='/r/MarioCartoons'>Cartoons</Link></li>
                         </ul>
                     </div>
 
