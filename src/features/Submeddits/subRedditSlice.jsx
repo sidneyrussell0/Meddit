@@ -1,48 +1,85 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getSubreddits } from '../../app/reddit';
 
-const initialState = {
-  subreddits: [],
-  error: false,
-  isLoading: false,
-};
+//Fetch from Reddit API
+export const fetchSubreddits = createAsyncThunk(
+  'subreddits/fetchSubreddits',
+  async (_, thunkAPI) => {
+    try {
+      const data = await getSubreddits();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 const subRedditSlice = createSlice({
   name: 'subreddits',
-  initialState,
+  initialState: {
+    subreddits: [
+      //Local fake subreddits, delete when using API
+      {
+        id: 'local1',
+        display_name: 'Test One',
+        display_name_prefixed: 'r/1Subreddit',
+        title: 'First Subreddit',
+        icon_img: '/Images/default.png',
+      },
+      {
+        id: 'local2',
+        display_name: 'Test Two',
+        display_name_prefixed: 'r/2Subreddit',
+        title: 'Second Subreddit',
+        icon_img: '/Images/default.png',
+      },
+      {
+        id: 'local3',
+        display_name: 'Test Three',
+        display_name_prefixed: 'r/3Subreddit',
+        title: 'Third Subreddit',
+        icon_img: '/Images/default.png',
+      },
+      {
+        id: 'local4',
+        display_name: 'Test Four',
+        display_name_prefixed: 'r/4Subreddit',
+        title: 'Fourth Subreddit',
+        icon_img: '/Images/default.png',
+      },
+      //
+    ],
+    loading: false,
+    error: null,
+  },
   reducers: {
-    startGetSubreddits(state) {
-      state.isLoading = true;
-      state.error = false;
+    addLocalSubreddit: (state, action) => {
+      state.subreddits.push(action.payload);
     },
-    getSubredditsSuccess(state, action) {
-      state.isLoading = false;
-      state.subreddits = action.payload;
+    resetSubredditState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
     },
-    getSubredditsFailed(state) {
-      state.isLoading = false;
-      state.error = true;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchSubreddits.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(fetchSubreddits.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.subreddits = [...state.subreddits, ...action.payload];
+      })
+      .addCase(fetchSubreddits.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const {
-  getSubredditsFailed,
-  getSubredditsSuccess,
-  startGetSubreddits,
-} = subRedditSlice.actions;
-
+export const { addLocalSubreddit, resetSubredditState } = subRedditSlice.actions;
 export default subRedditSlice.reducer;
-
-// This is a Redux Thunk that gets subreddits.
-export const fetchSubreddits = () => async (dispatch) => {
-  try {
-    dispatch(startGetSubreddits());
-    const subreddits = await getSubreddits();
-    dispatch(getSubredditsSuccess(subreddits));
-  } catch (error) {
-    dispatch(getSubredditsFailed());
-  }
-};
-
-export const selectSubreddits = (state) => state.subreddits.subreddits;
