@@ -1,27 +1,17 @@
 //Submeddit Page
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getSubreddits } from '../../app/reddit';
+import { fetchSubreddits } from './subRedditSlice';
 import './Submeddits.css';
 
 const Submeddits = () => {
-    const [subreddits, setSubreddits] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+    const { subreddits, loading, error } = useSelector((state) => state.subreddits);
 
     useEffect(() => {
-        const fetchSubreddits = async () => {
-            try {
-                const data = await getSubreddits();
-                setSubreddits(data);
-            } catch (err) {
-                setError('Failed to load subreddits');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSubreddits();
-    }, []);
+        dispatch(fetchSubreddits());
+    }, [dispatch]);
 
     if (loading) return <p>Loading subreddits...</p>
     if (error) return <p>{error}</p>;
@@ -31,11 +21,11 @@ const Submeddits = () => {
             <h2>Popular Submeddits</h2>
             <ul>
                 {subreddits.map((sub) => (
-                    <li key={sub.id}>
-                        <Link to={`/r/${sub.display_name}`}>
+                    <li key={sub.id || sub.display_name}>
+                        <Link to={`/r/${sub.display_name || sub.title}`}>
                             <img 
                                 src={sub.icon_img || '/Images/default.png'}
-                                alt={sub.display_name}
+                                alt={sub.display_name || sub.title}
                                 className='subreddit-icon'
                             />
                             {sub.display_name_prefixed} - {sub.title}
