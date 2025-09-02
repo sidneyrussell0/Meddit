@@ -81,7 +81,7 @@ const postSlice = createSlice({
             .addCase(fetchSubredditPosts.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                state.posts = action.payload;
+                state.posts = [...state.posts, ...action.payload];
             })
             .addCase(fetchSubredditPosts.rejected, (state, action) => {
                 state.loading = false;

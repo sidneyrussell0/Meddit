@@ -15,12 +15,12 @@ const Post = ({ subreddit: propSubreddit }) => {
     const activeSubreddit = propSubreddit || paramSubreddit || 'SMW';
 
     //Fetch Reddit posts
-    /*useEffect(() => {
+    useEffect(() => {
         dispatch(fetchSubredditPosts(activeSubreddit));
     }, [dispatch, activeSubreddit]);
 
     if (loading) return <p>Loading posts...</p>;
-    if (error) return <p>Error: {error}</p>;*/
+    if (error) return <p>Error: {error}</p>;
 
     //Combines local posts and Reddit posts
     const sortedPosts = [...posts].sort((a, b) => b.created_utc - a.created_utc);
