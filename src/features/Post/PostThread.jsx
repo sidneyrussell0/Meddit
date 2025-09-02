@@ -26,6 +26,13 @@ const PostThread = () => {
         <div className='post-thread'>
             <h2>{post.title}</h2>
             {post.body && <p>{post.body}</p>}
+            {post.image && (
+                        <img 
+                            src={post.image}
+                            alt={post.title}
+                            className='post-image'
+                        />
+            )}
             <small>
                 Post by {post.author} in r/{subreddit} | {post.ups} 👍 | {post.num_comments} Comments
             </small>
