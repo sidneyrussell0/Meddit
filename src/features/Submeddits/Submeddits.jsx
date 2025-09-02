@@ -1,44 +1,50 @@
 //Submeddit Page
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchSubreddits, resetSubmedditState } from './submedditSlice';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getSubreddits } from '../../app/reddit';
+import './Submeddits.css';
 
-const SubmedditPage = () => {
-    const dispatch = useDispatch();
-    const { subreddits, loading, error } = useSelector((state) => state.submeddits);
+const Submeddits = () => {
+    const [subreddits, setSubreddits] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        dispatch(fetchSubreddits());
-    }, [dispatch]);
+        const fetchSubreddits = async () => {
+            try {
+                const data = await getSubreddits();
+                setSubreddits(data);
+            } catch (err) {
+                setError('Failed to load subreddits');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSubreddits();
+    }, []);
 
-    if (loading) {
-        return <p>Loading subreddits...</p>;
-    }
-
-    if (error) {
-        return <p>Error loading subreddits: {error}</p>;
-    }
+    if (loading) return <p>Loading subreddits...</p>
+    if (error) return <p>{error}</p>;
 
     return (
-        <div className='submeddit-page'>
+        <div className='submeddits-list'>
             <h2>Popular Submeddits</h2>
-            {subreddits.length > 0 ? (
-                subreddits.map((sub) => (
-                    <div key={sub.id} className='submeddit'>
-                        <h3>{sub.display_name_prefixed}</h3>
-                        <p>{sub.title}</p>
-                        <p><small>{sub.public_description}</small></p>
-                        <p>
-                            Subscribers: {sub.subscribers?.toLocaleString() || 0}
-                            <button style={{ marginLeft: '10px' }}>FOLLOW</button>
-                        </p>
-                    </div>
-                ))
-            ) : (
-                <p>No subreddits found.</p>
-            )}
+            <ul>
+                {subreddits.map((sub) => (
+                    <li key={sub.id}>
+                        <Link to={`/r/${sub.display_name}`}>
+                            <img 
+                                src={sub.icon_img || '/Images/default.png'}
+                                alt={sub.display_name}
+                                className='subreddit-icon'
+                            />
+                            {sub.display_name_prefixed} - {sub.title}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
 
-export default SubmedditPage;
+export default Submeddits;

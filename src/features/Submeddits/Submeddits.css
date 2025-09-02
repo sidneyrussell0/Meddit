@@ -1,0 +1,20 @@
+.submeddits-list {
+    padding: 1rem;
+}
+
+.submeddits-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.submeddits-list li {
+    margin: 0.5rem 0;
+}
+
+.subreddit-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+    border-radius: 50%;
+}
