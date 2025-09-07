@@ -22,7 +22,7 @@ const Sidebar = () => {
                 
             </ul>
             <p className='see-more'>
-                    <Link to='/submeddit'>See More</Link>
+                    <Link to='/submeddits'>See More</Link>
             </p>
         </aside>
     );
