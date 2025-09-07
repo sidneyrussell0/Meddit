@@ -1,10 +1,7 @@
-//Will not show body after submission
-//Also need to change r/undefined to r/meddit
-
 //Form for submitting new posts (local only)
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addLocalPost } from './postSlice';
+import { addLocalPost } from '../../app/redditSlice';
 import './CreatePost.css';
 
 const CreatePost = ({ onClose }) => {
