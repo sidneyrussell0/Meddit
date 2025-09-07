@@ -64,7 +64,7 @@ const redditSlice = createSlice({
     subreddits: [],
     searchResults: [],
     searchTerm: '',
-    selectedSubreddit: '/r/pics/',
+    selectedSubreddit: '/r/SMW/',
     loading: false,
     error: null,
     success: false,
