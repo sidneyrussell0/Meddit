@@ -1,68 +1,55 @@
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
-import { getSubredditPosts, getPostComments } from './reddit';
+import { getSubredditPosts, getPostComments, searchReddit } from './reddit';
 
 //Get posts from subreddit
-export const fetchSubredditPosts = createAsyncThunk('post/fetchSubredditPosts', async (subreddit, thunkAPI) => {
+export const fetchSubredditPosts = createAsyncThunk(
+  'post/fetchSubredditPosts', 
+  async (subreddit, thunkAPI) => {
   try {
     const posts = await getSubredditPosts(subreddit);
-    return posts;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
-  }
-});
-
-//Get comments for a specific post
-export const fetchComments = createAsyncThunk('post/fetchComments', async (permalink, thunkAPI) => {
-  try {
-      const comments = await getPostComments(permalink);
-      return comments;
-  } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-  }
-});
-
-// We are adding showingComments and comments as additional fields to 
-//handle showing them when the user wants to. We need to do this because we need 
-//to call another API endpoint to get the comments for each post.
-export const postsWithMetadata = posts.map((post) => ({
+    //Metadata fields for comment handling
+    return posts.map((post) => ({
       ...post,
       showingComments: false,
       comments: [],
       loadingComments: false,
       errorComments: false,
     }));
-    dispatch(getPostsSuccess(postsWithMetadata));
   } catch (error) {
-    dispatch(getPostsFailed());
+    return thunkAPI.rejectWithValue(error.message);
   }
-};
+});
 
-//Select posts
-export const selectPosts = (state) => state.reddit.posts;
+//Get comments for a specific post
+export const fetchComments = createAsyncThunk(
+  'post/fetchComments', 
+  async (permalink, thunkAPI) => {
+  try {
+      const comments = await getPostComments(permalink);
+      return { permalink, comments };
+  } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+  }
+});
 
 //Search
-export const selectSearchTerm = (state) => state.reddit.searchTerm;
-export const selectSelectedSubreddit = (state) =>
-  state.reddit.selectedSubreddit;
-
-export const selectFilteredPosts = createSelector(
-  [selectPosts, selectSearchTerm],
-  (posts, searchTerm) => {
-    if (searchTerm !== '') {
-      return posts.filter((post) =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+export const fetchSearchResults = createAsyncThunk(
+  'reddit/fetchSearchResults',
+  async (query, thunkAPI) => {
+    try {
+      const results = await searchReddit(query);
+      return results;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
     }
-
-    return posts;
-  }
-);
+  });
 
 const redditSlice = createSlice({
   name: 'reddit',
-  initialState = {
+  initialState: {
     posts: [],
     comments: [],
+    searchResults: [],
     searchTerm: '',
     selectedSubreddit: '/r/pics/',
     loading: false,
@@ -73,58 +60,76 @@ const redditSlice = createSlice({
     addLocalPost: (state, action) => {
       state.posts.push(action.payload);
     },
+    setSearchTerm(state, action) {
+      state.searchTerm = action.payload;
+    },
+    toggleShowingComments: (state, action) => {
+      const postIndex = action.payload;
+      state.posts[postIndex].showingComments =
+        !state.posts[postIndex].showingComments;
+    },
+    setSelectedSubreddit: (state, action) => {
+      state.selectedSubreddit = action.payload;
+      state.searchTerm = '';
+    },
   },
   extraReducers: builder => {
     builder
-    //fetchSubredditPosts
-    .addCase(fetchSubredditPosts.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-      state.success = false;
-    })
-    .addCase(fetchSubredditPosts.fulfilled, (state, action) => {
-      state.loading = false;
-      state.success = true;
-      state.posts = [...state.posts, ...action.payload];
-    })
-    .addCase(fetchSubredditPosts.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      //Subreddit posts
+      .addCase(fetchSubredditPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.posts = [];
+      })
+      .addCase(fetchSubredditPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.posts = action.payload;
+      })
+      .addCase(fetchSubredditPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-    //fetchComments
-    .addCase(fetchComments.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-      state.success = false;
-    })
-    .addCase(fetchComments.fulfilled, (state, action) => {
-      state.loading = false;
-      state.success = true;
-      state.searchedPost = action.payload;
-    })
-    .addCase(toggleShowingComments, (state, action) => {
-      state.posts[action.payload].showingComments = !state.posts[action.payload]
-        .showingComments;
-    })
-    .addCase(fetchComments.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      //Comments
+      .addCase(fetchComments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
 
-    //Search
-    .addCase(setSearchTerm, (state, action) => {
-      state.searchTerm = action.payload;
-    })
+        //Finds post and attaches comments
+        const { permalink, comments } = action.payload;
+        const post = state.posts.find((p) => p.permalink === permalink);
+        if (post) {
+          post.comments = comments;
+          post.loadingComments = false;
+        }
+      })
+      .addCase(fetchComments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-     //Selected
-    .addCase(setSelectedSubreddit, (state, action) => {
-      state.selectedSubreddit = action.payload;
-      state.searchTerm = '';
-    })
+      //Search
+      .addCase(fetchSearchResults.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.searchResults = [];
+      })
+      .addCase(fetchSearchResults.fulfilled, (state, action) => {
+        state.loading = false;
+        state.searchResults = action.payload;
+      })
+      .addCase(fetchSearchResults.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
   },
 });
 
 
-export const { addLocalPost } = redditSlice.actions;
+export const { addLocalPost, setSearchTerm, toggleShowingComments, setSelectedSubreddit } = redditSlice.actions;
 export default redditSlice.reducer;
