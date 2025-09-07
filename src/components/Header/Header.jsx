@@ -15,7 +15,6 @@ const Header = () => {
         e.preventDefault();
         if (!input.trim()) return;
 
-        dispatch(setQuery(input));
         dispatch(fetchSearchResults(input));
         navigate(`/search/${input}`);
     };
