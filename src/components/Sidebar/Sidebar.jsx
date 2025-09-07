@@ -16,7 +16,7 @@ const Sidebar = () => {
             <ul className='side-links'>
                 {randomSubmeddits.slice(0, 4).map(name => (
                     <li key={name}>
-                        <Link to={`/submeddit/${name}`}>m/{name}</Link>
+                        <Link to={`/r/${name}`}>r/{name}</Link>
                     </li>
                 ))}
                 
