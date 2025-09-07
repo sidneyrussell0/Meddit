@@ -1,5 +1,6 @@
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
-import { getSubredditPosts, getPostComments, searchReddit } from './reddit';
+import { getSubredditPosts, getPostComments, getSubreddits, searchReddit } from './reddit';
+import { addLocalSubreddit } from '../features/submeddits/subRedditSlice';
 
 //Get posts from subreddit
 export const fetchSubredditPosts = createAsyncThunk(
@@ -32,6 +33,18 @@ export const fetchComments = createAsyncThunk(
   }
 });
 
+//Get subreddits from Reddit
+export const fetchSubreddits = createAsyncThunk(
+  'subreddits/fetchSubreddits',
+  async (_, thunkAPI) => {
+    try {
+      const data = await getSubreddits();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  });
+
 //Search
 export const fetchSearchResults = createAsyncThunk(
   'reddit/fetchSearchResults',
@@ -49,6 +62,7 @@ const redditSlice = createSlice({
   initialState: {
     posts: [],
     comments: [],
+    subreddits: [],
     searchResults: [],
     searchTerm: '',
     selectedSubreddit: '/r/pics/',
@@ -60,13 +74,16 @@ const redditSlice = createSlice({
     addLocalPost: (state, action) => {
       state.posts.push(action.payload);
     },
-    setSearchTerm(state, action) {
-      state.searchTerm = action.payload;
-    },
     toggleShowingComments: (state, action) => {
       const postIndex = action.payload;
       state.posts[postIndex].showingComments =
         !state.posts[postIndex].showingComments;
+    },
+    addLocalSubreddit: (state, action) => {
+      state.subreddits.push(action.payload);
+    },
+    setSearchTerm(state, action) {
+      state.searchTerm = action.payload;
     },
     setSelectedSubreddit: (state, action) => {
       state.selectedSubreddit = action.payload;
@@ -113,6 +130,22 @@ const redditSlice = createSlice({
         state.error = action.payload;
       })
 
+      //Subreddits
+      .addCase(fetchSubreddits.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = [];
+      })
+      .addCase(fetchSubreddits.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.subreddits = action.payload;
+      })
+      .addCase(fetchSubreddits.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       //Search
       .addCase(fetchSearchResults.pending, (state) => {
         state.loading = true;
@@ -131,5 +164,5 @@ const redditSlice = createSlice({
 });
 
 
-export const { addLocalPost, setSearchTerm, toggleShowingComments, setSelectedSubreddit } = redditSlice.actions;
+export const { addLocalPost, toggleShowingComments, addLocalSubreddit, setSearchTerm, setSelectedSubreddit } = redditSlice.actions;
 export default redditSlice.reducer;
