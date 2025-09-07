@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setQuery, fetchSearchResults } from '../../features/search/searchSlice';
+import { fetchSearchResults } from '../../app/redditSlice';
 import CreatePost from '../../features/post/CreatePost';
 import './Header.css';
 
