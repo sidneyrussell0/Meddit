@@ -1,7 +1,6 @@
 //Shows full post content
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts } from '../../app/redditSlice';
 import { fetchSubredditPosts } from '../../app/redditSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Post.css';
@@ -10,14 +9,15 @@ const Post = ({ subreddit: propSubreddit }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { subreddit: paramSubreddit } = useParams();
+
     const { posts, loading, error, selectedSubreddit } = useSelector((state) => state.reddit);
 
     // Use prop first, fallback to URL param
-    const activeSubreddit = propSubreddit || paramSubreddit || 'SMW';
+    const activeSubreddit = propSubreddit || selectedSubreddit || 'SMW';
 
     //Fetch Reddit posts
     useEffect(() => {
-        dispatch(fetchPosts(activeSubreddit));
+        dispatch(fetchSubredditPosts(activeSubreddit));
     }, [dispatch, activeSubreddit]);
 
     if (loading) return <p>Loading posts...</p>;
