@@ -1,6 +1,5 @@
 import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
 import { getSubredditPosts, getPostComments, getSubreddits, searchReddit } from './reddit';
-import { addLocalSubreddit } from '../features/submeddits/subRedditSlice';
 
 //Get posts from subreddit
 export const fetchSubredditPosts = createAsyncThunk(
