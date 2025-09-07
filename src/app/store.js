@@ -5,7 +5,6 @@ import userReducer from '../features/user/userSlice';
 const store = configureStore({
     reducer: {
         reddit: redditReducer,
-        subreddits: subRedditReducer, //API
         user: userReducer,
     },
 });
