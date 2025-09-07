@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
-import { fetchComments } from './postSlice';
+import { fetchComments } from '../../app/redditSlice';
 import './Post.css';
 
 const PostThread = () => {
