@@ -5,7 +5,7 @@ import './Sidebar.css';
 
 const Sidebar = () => {
     //Array
-    const submeddits = ['Gameplay', 'FAQs', 'Anime', 'MarioMusic', 'TastyDelights', 'NewNewNew'];
+    const submeddits = ['Mario', 'EverythingPeach', 'Rosalina', 'Toad', 'bowser', 'donkeykong'];
     //Shuffles the array 
     const shuffled = [...submeddits].sort(() => 0.5 - Math.random());
     const randomSubmeddits = shuffled.slice(0, 4);
