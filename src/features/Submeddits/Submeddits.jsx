@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchSubreddits } from './subRedditSlice';
+import { fetchSubreddits } from '../../app/redditSlice';
 import './Submeddits.css';
 
 const Submeddits = () => {
