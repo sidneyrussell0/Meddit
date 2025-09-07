@@ -25,7 +25,7 @@ function SearchResults() {
     return (
         <div className='search-results'>
             <h2>Search results for "{query}"</h2>
-            {results.map((post) => (
+            {searchResults.map((post) => (
                 <div key={post.id} className="post-card">
                 <h3>{post.title}</h3>
                 <p>{post.selftext || post.body}</p>
