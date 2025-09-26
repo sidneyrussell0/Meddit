@@ -7,8 +7,8 @@ import './Post.css';
 
 const PostThread = () => {
     const dispatch = useDispatch();
-    const { subreddit, postId } = useParams();
-    const { comments, loading, error } = useSelector((state) => state.post);
+    const { subreddit } = useParams();
+    const { comments, loading, error } = useSelector((state) => state.reddit);
     const location = useLocation();
     const post = location.state; //post passed from Post.jsx
 
@@ -27,19 +27,19 @@ const PostThread = () => {
             <h2>{post.title}</h2>
             {post.body && <p>{post.body}</p>}
             {post.image && (
-                        <img 
-                            src={post.image}
-                            alt={post.title}
-                            className='post-image'
-                        />
+                <img 
+                src={post.image}
+                alt={post.title}
+                className='post-image'
+                />
             )}
             <small>
                 Post by {post.author} in r/{subreddit} | {post.ups} 👍 | {post.num_comments} Comments
             </small>
 
             <h3>Comments</h3>
-            {comments.length > 0? (
-                comments.map((c) => (
+            {post.comments && comments.length > 0 ? (
+                post.comments.map((c) => (
                     <div key={c.id} className='comment'>
                         <p><strong>{c.author}</strong>: {c.body}</p>
                     </div>
