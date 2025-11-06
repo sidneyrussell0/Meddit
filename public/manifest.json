@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "short_name": "Meddit",
   "name": "Meddit Application",
+=======
+  "short_name": "React App",
+  "name": "Create React App Sample",
+>>>>>>> b723e250b112f063a5b909c9ad81dd14bca2d965
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,6 +13,7 @@
       "type": "image/x-icon"
     },
     {
+<<<<<<< HEAD
       "src": "logo200.svg",
       "type": "image/png",
       "sizes": "200x200"
@@ -16,10 +22,25 @@
       "src": "logo180A.svg",
       "type": "image/png",
       "sizes": "500x500"
+=======
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+>>>>>>> b723e250b112f063a5b909c9ad81dd14bca2d965
     }
   ],
   "start_url": ".",
   "display": "standalone",
+<<<<<<< HEAD
   "theme_color": "#FF3939",
   "background_color": "#000101"
+=======
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+>>>>>>> b723e250b112f063a5b909c9ad81dd14bca2d965
 }
